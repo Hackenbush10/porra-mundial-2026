@@ -52,9 +52,10 @@ export async function POST(req: NextRequest) {
   });
 
   if (error) {
-    console.error('[apuestas] Supabase error:', error);
+    console.error('[apuestas] Supabase error — code:', error.code, '| message:', error.message, '| details:', error.details, '| hint:', error.hint);
+    const detail = `${error.code ?? ''}: ${error.message ?? error}`;
     return NextResponse.json(
-      { error: 'Error al guardar la apuesta. Inténtalo de nuevo.' },
+      { error: `Error al guardar la apuesta: ${detail}` },
       { status: 500 },
     );
   }
