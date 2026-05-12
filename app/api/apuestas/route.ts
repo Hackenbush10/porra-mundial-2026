@@ -1,12 +1,37 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
-// Use service-role or anon key server-side — same anon key is fine since RLS
-// is configured to allow INSERT from anon.
+// Anon client — RLS allows anon INSERT.
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
 );
+
+// Service-role client — bypasses RLS, only used for admin GET.
+function adminClient() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  );
+}
+
+// ── GET /api/apuestas — lista todas las apuestas (admin) ──────────────────────
+
+export async function GET() {
+  const { data, error } = await adminClient()
+    .from('apuestas')
+    .select('id, nombre, seccion, campeon, created_at, grupos, mejores_terceros, bracket')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('[apuestas GET] Supabase error:', error.code, error.message);
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+
+  return NextResponse.json({ apuestas: data });
+}
+
+// ── POST /api/apuestas — guarda una apuesta nueva ─────────────────────────────
 
 export async function POST(req: NextRequest) {
   let body: unknown;
