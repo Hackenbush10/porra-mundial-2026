@@ -18,17 +18,36 @@ function adminClient() {
 // ── GET /api/apuestas — lista todas las apuestas (admin) ──────────────────────
 
 export async function GET() {
-  const { data, error } = await adminClient()
-    .from('apuestas')
-    .select('id, nombre, seccion, campeon, created_at, grupos, mejores_terceros, bracket')
-    .order('created_at', { ascending: false });
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-  if (error) {
-    console.error('[apuestas GET] Supabase error:', error.code, error.message);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  if (!url || !serviceKey) {
+    console.error('[apuestas GET] Faltan variables de entorno — URL:', url ? 'ok' : 'MISSING', '| SERVICE_ROLE_KEY:', serviceKey ? 'ok' : 'MISSING');
+    return NextResponse.json({ error: 'SERVICE_ROLE_KEY no configurada' }, { status: 500 });
   }
 
-  return NextResponse.json({ apuestas: data });
+  try {
+    const { data, error } = await adminClient()
+      .from('apuestas')
+      .select('id, nombre, seccion, campeon, created_at, grupos, mejores_terceros, bracket')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('[apuestas GET] Supabase error completo:', JSON.stringify(error, null, 2));
+      return NextResponse.json(
+        { error: `Error Supabase: ${error.code ?? ''} — ${error.message}` },
+        { status: 500 },
+      );
+    }
+
+    return NextResponse.json({ apuestas: data });
+  } catch (err) {
+    console.error('[apuestas GET] Excepción inesperada:', err);
+    return NextResponse.json(
+      { error: err instanceof Error ? err.message : 'Error inesperado' },
+      { status: 500 },
+    );
+  }
 }
 
 // ── POST /api/apuestas — guarda una apuesta nueva ─────────────────────────────
