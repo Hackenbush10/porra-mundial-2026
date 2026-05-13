@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Porra Mundial 2026 — Documentación técnica</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #F9F7F2;
+    --surface: #FFFFFF;
+    --surface-2: #F2EFE8;
+    --border: #E2DDD4;
+    --border-strong: #C8C0B0;
+    --text: #1A1814;
+    --text-2: #5C5649;
+    --text-3: #9B9388;
+    --accent: #C8391B;
+    --accent-light: #FAECE7;
+    --accent-text: #8A2010;
+    --green: #2A7A4B;
+    --green-light: #E6F5EE;
+    --green-text: #1A5030;
+    --blue: #1A4FAB;
+    --blue-light: #E8EFFE;
+    --blue-text: #0F3070;
+    --amber: #A06010;
+    --amber-light: #FDF4E7;
+    --amber-text: #6A3D08;
+    --mono: 'DM Mono', monospace;
+    --sans: 'DM Sans', sans-serif;
+    --serif: 'DM Serif Display', serif;
+    --radius: 6px;
+    --radius-lg: 10px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .site-header {
+    background: var(--text);
+    color: #F9F7F2;
+    padding: 3.5rem 2rem 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .site-header::before {
+    content: '⚽';
+    position: absolute;
+    right: -20px;
+    top: -30px;
+    font-size: 180px;
+    opacity: 0.06;
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+  }
+  .header-inner { max-width: 820px; margin: 0 auto; position: relative; }
+  .header-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    color: #9B9388;
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+  }
+  .header-title {
+    font-family: var(--serif);
+    font-size: 48px;
+    line-height: 1.05;
+    color: #F9F7F2;
+    margin-bottom: 0.6rem;
+  }
+  .header-title em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .header-sub {
+    font-size: 15px;
+    color: #9B9388;
+    max-width: 520px;
+    line-height: 1.7;
+    margin-bottom: 1.75rem;
+    font-weight: 300;
+  }
+  .header-badges { display: flex; gap: 10px; flex-wrap: wrap; }
+  .hbadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-family: var(--mono);
+    padding: 5px 12px;
+    border-radius: 4px;
+    border: 1px solid #3A3630;
+    color: #C8C0B0;
+  }
+  .hbadge.live { border-color: #2A7A4B; color: #5EC98A; }
+  .hbadge .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+  /* LAYOUT */
+  .layout { display: flex; max-width: 1100px; margin: 0 auto; }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 200px;
+    flex-shrink: 0;
+    padding: 2rem 0 2rem 1.5rem;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+  .sidebar-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    color: var(--text-3);
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+    padding-left: 0.75rem;
+  }
+  .nav-list { list-style: none; }
+  .nav-list li a {
+    display: block;
+    padding: 6px 12px;
+    font-size: 13px;
+    color: var(--text-2);
+    text-decoration: none;
+    border-left: 2px solid transparent;
+    border-radius: 0 var(--radius) var(--radius) 0;
+    transition: all 0.15s;
+    line-height: 1.4;
+  }
+  .nav-list li a:hover { color: var(--text); border-left-color: var(--border-strong); background: var(--surface-2); }
+  .nav-list li a.active { color: var(--accent); border-left-color: var(--accent); background: var(--accent-light); font-weight: 500; }
+  .nav-divider { height: 1px; background: var(--border); margin: 0.75rem 0.75rem; }
+
+  /* MAIN */
+  .main { flex: 1; min-width: 0; padding: 2.5rem 2rem 4rem; }
+
+  /* SECTIONS */
+  .doc-section { margin-bottom: 3.5rem; scroll-margin-top: 2rem; }
+  .section-header { display: flex; align-items: baseline; gap: 0.75rem; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border); }
+  .section-number { font-family: var(--mono); font-size: 12px; color: var(--text-3); min-width: 24px; }
+  .section-title { font-family: var(--serif); font-size: 28px; color: var(--text); line-height: 1.1; }
+
+  /* STATS ROW */
+  .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 1.5rem; }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.1rem 1.2rem;
+  }
+  .stat-label { font-size: 11px; color: var(--text-3); font-family: var(--mono); letter-spacing: 0.5px; margin-bottom: 6px; }
+  .stat-value { font-size: 28px; font-family: var(--serif); color: var(--text); line-height: 1; }
+  .stat-unit { font-size: 13px; color: var(--text-3); font-family: var(--sans); font-weight: 300; }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem 1.4rem;
+    margin-bottom: 1rem;
+  }
+  .card-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 0.6rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-title .icon { font-size: 16px; }
+  .card-body { font-size: 14px; color: var(--text-2); line-height: 1.75; }
+  .card-body code { font-family: var(--mono); font-size: 12.5px; background: var(--surface-2); padding: 1px 5px; border-radius: 3px; border: 1px solid var(--border); }
+
+  /* TWO COL */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+  /* STACK GRID */
+  .stack-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1.5rem; }
+  .stack-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1rem 1.1rem;
+    transition: border-color 0.15s;
+  }
+  .stack-item:hover { border-color: var(--border-strong); }
+  .stack-layer { font-family: var(--mono); font-size: 10px; color: var(--text-3); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+  .stack-tech { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
+  .stack-detail { font-size: 12px; color: var(--text-3); }
+
+  /* CODE */
+  .code-block {
+    background: var(--text);
+    color: #C8C0B0;
+    border-radius: var(--radius-lg);
+    padding: 1.2rem 1.4rem;
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.7;
+    overflow-x: auto;
+    margin: 1rem 0;
+    white-space: pre;
+  }
+  .code-block .kw { color: #5EC98A; }
+  .code-block .str { color: #F5A623; }
+  .code-block .cm { color: #5C5649; }
+
+  /* GROUPS */
+  .groups-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .group-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 0.9rem 1rem;
+    transition: border-color 0.15s, transform 0.15s;
+  }
+  .group-card:hover { border-color: var(--border-strong); transform: translateY(-1px); }
+  .group-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--accent);
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+  }
+  .group-teams { font-size: 12.5px; color: var(--text-2); line-height: 2.0; }
+  .group-teams span { display: block; padding-left: 0; position: relative; }
+
+  /* TIMELINE */
+  .timeline { position: relative; }
+  .timeline::before { content: ''; position: absolute; left: 15px; top: 20px; bottom: 20px; width: 1px; background: var(--border); }
+  .tl-item { display: flex; gap: 1.25rem; margin-bottom: 1.5rem; position: relative; }
+  .tl-marker { flex-shrink: 0; width: 30px; display: flex; flex-direction: column; align-items: center; padding-top: 3px; }
+  .tl-dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--border-strong); background: var(--bg); z-index: 1; }
+  .tl-dot.done { background: var(--green); border-color: var(--green); }
+  .tl-dot.warn { background: var(--amber); border-color: var(--amber); }
+  .tl-content { flex: 1; }
+  .tl-phase { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+  .tl-desc { font-size: 13px; color: var(--text-2); line-height: 1.7; }
+  .tl-desc code { font-family: var(--mono); font-size: 12px; background: var(--surface-2); padding: 1px 5px; border-radius: 3px; border: 1px solid var(--border); }
+
+  /* BADGES */
+  .badge { display: inline-flex; align-items: center; font-size: 11px; font-family: var(--mono); font-weight: 500; padding: 2px 8px; border-radius: 4px; }
+  .badge-green { background: var(--green-light); color: var(--green-text); }
+  .badge-blue { background: var(--blue-light); color: var(--blue-text); }
+  .badge-amber { background: var(--amber-light); color: var(--amber-text); }
+  .badge-red { background: var(--accent-light); color: var(--accent-text); }
+
+  /* ALERT BOXES */
+  .alert { border-radius: var(--radius-lg); padding: 1.1rem 1.3rem; margin: 1rem 0; }
+  .alert-title { font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 7px; margin-bottom: 6px; }
+  .alert-body { font-size: 13px; line-height: 1.7; }
+  .alert-body code { font-family: var(--mono); font-size: 12px; }
+  .alert.error { background: var(--accent-light); border: 1px solid #F0997B; }
+  .alert.error .alert-title { color: var(--accent-text); }
+  .alert.error .alert-body { color: #7A2A14; }
+  .alert.success { background: var(--green-light); border: 1px solid #5DCAA5; }
+  .alert.success .alert-title { color: var(--green-text); }
+  .alert.success .alert-body { color: #1A5030; }
+  .alert.info { background: var(--blue-light); border: 1px solid #85B7EB; }
+  .alert.info .alert-title { color: var(--blue-text); }
+  .alert.info .alert-body { color: #0C3A70; }
+  .alert.warn { background: var(--amber-light); border: 1px solid #EF9F27; }
+  .alert.warn .alert-title { color: var(--amber-text); }
+  .alert.warn .alert-body { color: #6A3D08; }
+
+  /* DECISIONS */
+  .decision-list { list-style: none; border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; background: var(--surface); }
+  .decision-list li { display: flex; align-items: flex-start; gap: 10px; padding: 0.85rem 1.2rem; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--text-2); line-height: 1.6; }
+  .decision-list li:last-child { border-bottom: none; }
+  .decision-list li::before { content: '✓'; color: var(--green); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+
+  /* SLOT TABLE */
+  .slot-table { width: 100%; border-collapse: collapse; font-size: 13px; background: var(--surface); border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border); margin: 1rem 0; }
+  .slot-table th { background: var(--surface-2); font-family: var(--mono); font-size: 11px; letter-spacing: 0.5px; color: var(--text-3); font-weight: 500; padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+  .slot-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); color: var(--text-2); }
+  .slot-table tr:last-child td { border-bottom: none; }
+  .slot-table code { font-family: var(--mono); font-size: 12px; background: var(--surface-2); padding: 1px 5px; border-radius: 3px; }
+
+  /* FOOTER */
+  .site-footer { background: var(--text); color: #5C5649; padding: 1.5rem 2rem; font-size: 13px; font-family: var(--mono); text-align: center; }
+  .site-footer a { color: #9B9388; text-decoration: none; }
+  .site-footer a:hover { color: #C8C0B0; }
+
+  /* SUBHEADING */
+  .subheading { font-size: 13px; font-weight: 500; color: var(--text); margin: 1.5rem 0 0.75rem; }
+
+  @media (max-width: 780px) {
+    .sidebar { display: none; }
+    .main { padding: 1.5rem 1rem 3rem; }
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+    .stack-grid { grid-template-columns: repeat(2, 1fr); }
+    .groups-grid { grid-template-columns: repeat(2, 1fr); }
+    .two-col { grid-template-columns: 1fr; }
+    .header-title { font-size: 34px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <p class="header-eyebrow">El País · Documentación técnica · Mayo 2026</p>
+    <h1 class="header-title">Porra <em>Mundial</em> 2026</h1>
+    <p class="header-sub">App web de predicciones para el Mundial 2026. Bracket interactivo fase a fase, generación de PDF y almacenamiento en base de datos. Desarrollada para los compañeros de El País.</p>
+    <div class="header-badges">
+      <span class="hbadge live"><span class="dot"></span> En producción (Vercel)</span>
+      <span class="hbadge">Next.js 14 + TypeScript</span>
+      <span class="hbadge">Supabase EU West</span>
+      <span class="hbadge">48 equipos · 12 grupos</span>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="sidebar" aria-label="Índice de documentación">
+    <p class="sidebar-label">Contenidos</p>
+    <ul class="nav-list">
+      <li><a href="#overview">Visión general</a></li>
+      <li><a href="#stack">Stack técnico</a></li>
+      <li><a href="#database">Base de datos</a></li>
+    </ul>
+    <div class="nav-divider"></div>
+    <ul class="nav-list">
+      <li><a href="#equipos">Equipos y grupos</a></li>
+      <li><a href="#terceros">Lógica de terceros</a></li>
+    </ul>
+    <div class="nav-divider"></div>
+    <ul class="nav-list">
+      <li><a href="#desarrollo">Fases de desarrollo</a></li>
+      <li><a href="#bugs">Bugs resueltos</a></li>
+      <li><a href="#ops">Operaciones</a></li>
+    </ul>
+  </nav>
+
+  <main class="main">
+
+    <!-- VISIÓN GENERAL -->
+    <section class="doc-section" id="overview">
+      <div class="section-header">
+        <span class="section-number">01</span>
+        <h2 class="section-title">Visión general</h2>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-label">EQUIPOS</div>
+          <div class="stat-value">48 <span class="stat-unit">selecciones</span></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">GRUPOS</div>
+          <div class="stat-value">12 <span class="stat-unit">A – L</span></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">FASES</div>
+          <div class="stat-value">7 <span class="stat-unit">rondas</span></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">TABLA 3º</div>
+          <div class="stat-value">495 <span class="stat-unit">combinaciones</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="icon">⚙️</span> ¿Qué es y cómo funciona?</div>
+        <div class="card-body">
+          Un usuario abre la app, introduce su <strong>nombre</strong> y <strong>sección</strong> (texto libre), y rellena sus predicciones del Mundial 2026 fase a fase en un asistente tipo <em>wizard</em>:<br><br>
+          <strong>Grupos → 1/16 → 1/8 → Cuartos → Semis → Final → Campeón</strong><br><br>
+          Al terminar, genera un <strong>PDF con el bracket visual</strong> completo y las predicciones quedan guardadas automáticamente en Supabase. La app se comparte con un enlace público y no requiere autenticación.
+        </div>
+      </div>
+
+      <p class="subheading">Decisiones de diseño confirmadas</p>
+      <ul class="decision-list">
+        <li>Lógica FIFA oficial de terceros implementada íntegramente — tabla de 495 combinaciones en <code>thirdPlaceTable.ts</code></li>
+        <li>Partido por el 3er puesto omitido — la porra termina en campeón</li>
+        <li>Nombres de países en español, según la imagen de El País (p.ej. "EE UU", "C. Marfil", "Bosnia y H.")</li>
+        <li>Sin referencias a sedes ni fechas — solo fases</li>
+        <li>Política RLS anónima de solo INSERT en Supabase — anon key segura en el frontend</li>
+        <li>Sin autenticación — cualquiera con el enlace puede participar</li>
+      </ul>
+    </section>
+
+    <!-- STACK TÉCNICO -->
+    <section class="doc-section" id="stack">
+      <div class="section-header">
+        <span class="section-number">02</span>
+        <h2 class="section-title">Stack técnico</h2>
+      </div>
+
+      <div class="stack-grid">
+        <div class="stack-item">
+          <div class="stack-layer">Framework</div>
+          <div class="stack-tech">Next.js 14</div>
+          <div class="stack-detail">App Router + TypeScript</div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-layer">Estilos</div>
+          <div class="stack-tech">Tailwind CSS</div>
+          <div class="stack-detail">Mobile-first, responsive</div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-layer">Generación PDF</div>
+          <div class="stack-tech">@react-pdf/renderer</div>
+          <div class="stack-detail">Bracket generado en cliente</div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-layer">Base de datos</div>
+          <div class="stack-tech">Supabase</div>
+          <div class="stack-detail">EU West · París · plan free</div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-layer">Despliegue</div>
+          <div class="stack-tech">Vercel</div>
+          <div class="stack-detail">Plan free · CI/CD automático</div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-layer">Control de versiones</div>
+          <div class="stack-tech">GitHub</div>
+          <div class="stack-detail">Creado con gh CLI</div>
+        </div>
+      </div>
+
+      <p class="subheading">Variables de entorno (Vercel + <code>.env.local</code>)</p>
+<div class="code-block"><span class="cm"># .env.local — no commitear</span>
+<span class="kw">NEXT_PUBLIC_SUPABASE_URL</span>=<span class="str">https://[proyecto].supabase.co</span>
+<span class="kw">NEXT_PUBLIC_SUPABASE_ANON_KEY</span>=<span class="str">eyJhbGciOi...</span></div>
+
+      <div class="alert info">
+        <div class="alert-title">ℹ️ Sobre la anon key en el frontend</div>
+        <div class="alert-body">La anon key es segura para exponer en el frontend <strong>si y solo si</strong> las políticas RLS están bien configuradas (solo INSERT permitido para <code>anon</code>). La service_role key —que tiene acceso total— solo se usa en Google Apps Script, que es privado.</div>
+      </div>
+    </section>
+
+    <!-- BASE DE DATOS -->
+    <section class="doc-section" id="database">
+      <div class="section-header">
+        <span class="section-number">03</span>
+        <h2 class="section-title">Base de datos</h2>
+      </div>
+
+      <p class="subheading">Esquema: tabla <code>apuestas</code></p>
+<div class="code-block"><span class="cm">-- Supabase · región EU West (París)</span>
+<span class="kw">CREATE TABLE</span> public.apuestas (
+  id          uuid <span class="kw">DEFAULT</span> gen_random_uuid() <span class="kw">PRIMARY KEY</span>,
+  created_at  timestamptz <span class="kw">DEFAULT</span> now(),
+  nombre      text <span class="kw">NOT NULL</span>,
+  seccion     text,
+  fase_grupos jsonb,   <span class="cm">-- predicciones por grupo</span>
+  r16         jsonb,   <span class="cm">-- dieciseisavos de final</span>
+  r8          jsonb,   <span class="cm">-- octavos de final</span>
+  cuartos     jsonb,
+  semis       jsonb,
+  final       jsonb,
+  campeon     text
+);
+
+<span class="cm">-- RLS: solo INSERT para anónimos, sin SELECT</span>
+<span class="kw">ALTER TABLE</span> public.apuestas <span class="kw">ENABLE ROW LEVEL SECURITY</span>;
+<span class="kw">CREATE POLICY</span> "anon_insert" <span class="kw">ON</span> public.apuestas
+  <span class="kw">FOR INSERT TO</span> anon
+  <span class="kw">WITH CHECK</span> (true);
+
+<span class="cm">-- GRANT preventivo (cambio Supabase oct 2026)</span>
+<span class="kw">GRANT INSERT ON</span> public.apuestas <span class="kw">TO</span> anon;</div>
+
+      <div class="alert warn">
+        <div class="alert-title">⚠️ Acción requerida: cambio Supabase — 30 octubre 2026</div>
+        <div class="alert-body">A partir del 30 de octubre de 2026, Supabase requiere GRANTs explícitos en todos los proyectos existentes. El <code>GRANT INSERT ON public.apuestas TO anon;</code> ya ha sido ejecutado en el SQL Editor. Estado: <span class="badge badge-green">completado</span></div>
+      </div>
+
+      <p class="subheading">Security Advisor: estado actual</p>
+      <div class="card">
+        <div class="card-body">
+          <strong>0 errores · 3 warnings</strong> — todos ignorables:<br><br>
+          · <strong>RLS Policy Always True</strong> — intencional, app pública anónima<br>
+          · <strong>Public Can Execute SECURITY DEFINER Function</strong> — función interna de Supabase<br>
+          · <strong>Signed-In Users Can Execute SECURITY DEFINER Function</strong> — mismo caso
+        </div>
+      </div>
+    </section>
+
+    <!-- EQUIPOS -->
+    <section class="doc-section" id="equipos">
+      <div class="section-header">
+        <span class="section-number">04</span>
+        <h2 class="section-title">Equipos y grupos</h2>
+      </div>
+
+      <p style="font-size: 14px; color: var(--text-2); margin-bottom: 1.25rem;">48 selecciones en 12 grupos (A–L). Nombres en español según la guía gráfica de El País. Importante: los nombres deben coincidir <strong>exactamente</strong> al introducir resultados reales (tildes incluidas).</p>
+
+      <div class="groups-grid">
+        <div class="group-card"><div class="group-label">GRUPO A</div><div class="group-teams"><span>México</span><span>Sudáfrica</span><span>Corea del Sur</span><span>Rep. Checa</span></div></div>
+        <div class="group-card"><div class="group-label">GRUPO B</div><div class="group-teams"><span>Canadá</span><span>Bosnia y H.</span><span>Catar</span><span>Suiza</span></div></div>
+        <div class="group-card"><div class="group-label">GRUPO C</div><div class="group-teams"><span>Brasil</span><span>Marruecos</span><span>Haití</span><span>Escocia</span></div></div>
+        <div class="group-card"><div class="group-label">GRUPO D</div><div class="group-teams"><span>EE UU</span><span>Paraguay</span><span>Australia</span><span>Turquía</span></div></div>
+        <div class="group-card"><div class="group-label">GRUPO E</div><div class="group-teams"><span>Alemania</span><span>Curazao</span><span>C. Marfil</span><span>Ecuador</span></div></div>
+        <div class="group-card"><div class="group-label">GRUPO F</div><div class="group-teams"><span>Países Bajos</span><span>Japón</span><span>Suecia</span><span>Túnez</span></div></div>
+        <div class="group-card"><div class="group-label">GRUPO G</div><div class="group-teams"><span>Bélgica</span><span>Egipto</span><span>Irán</span><span>N. Zelanda</span></div></div>
+        <div class="group-card"><div class="group-label">GRUPO H</div><div class="group-teams"><span>España</span><span>Cabo Verde</span><span>Arabia Saudí</span><span>Uruguay</span></div></div>
+        <div class="group-card"><div class="group-label">GRUPO I</div><div class="group-teams"><span>Francia</span><span>Senegal</span><span>Irak</span><span>Noruega</span></div></div>
+        <div class="group-card"><div class="group-label">GRUPO J</div><div class="group-teams"><span>Argentina</span><span>Argelia</span><span>Austria</span><span>Jordania</span></div></div>
+        <div class="group-card"><div class="group-label">GRUPO K</div><div class="group-teams"><span>Portugal</span><span>RD Congo</span><span>Uzbekistán</span><span>Colombia</span></div></div>
+        <div class="group-card"><div class="group-label">GRUPO L</div><div class="group-teams"><span>Inglaterra</span><span>Croacia</span><span>Ghana</span><span>Panamá</span></div></div>
+      </div>
+    </section>
+
+    <!-- LÓGICA DE TERCEROS -->
+    <section class="doc-section" id="terceros">
+      <div class="section-header">
+        <span class="section-number">05</span>
+        <h2 class="section-title">Lógica de terceros</h2>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          El Mundial 2026 tiene 12 grupos, de los cuales solo 8 terceros clasificados pasan a los 1/16. La asignación de qué tercer clasificado juega contra qué primero depende de <strong>qué combinación de 8 grupos</strong> aportan un tercer clasificado. Hay C(12,8) = 495 combinaciones posibles.<br><br>
+          Se implementó la tabla completa en <code>thirdPlaceTable.ts</code>, generada a partir del fichero Excel oficial. La función <code>assignThirdPlaceTeams</code> recibe 8 letras de grupo, las ordena alfabéticamente, genera la clave (p.ej. <code>"ABCDEFGH"</code>) y consulta la tabla para obtener el mapa de slots.
+        </div>
+      </div>
+
+      <p class="subheading">Slots y su significado en el bracket</p>
+      <table class="slot-table">
+        <thead>
+          <tr>
+            <th>Slot</th>
+            <th>Partido 1/16</th>
+            <th>Mitad</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><code>vs1E</code></td><td>R16-1: 1º Grupo E vs 3º</td><td>Superior</td></tr>
+          <tr><td><code>vs1I</code></td><td>R16-2: 1º Grupo I vs 3º</td><td>Superior</td></tr>
+          <tr><td><code>vs1D</code></td><td>R16-7: 1º Grupo D vs 3º</td><td>Superior</td></tr>
+          <tr><td><code>vs1G</code></td><td>R16-8: 1º Grupo G vs 3º</td><td>Superior</td></tr>
+          <tr><td><code>vs1A</code></td><td>R16-11: 1º Grupo A vs 3º</td><td>Inferior</td></tr>
+          <tr><td><code>vs1L</code></td><td>R16-12: 1º Grupo L vs 3º</td><td>Inferior</td></tr>
+          <tr><td><code>vs1B</code></td><td>R16-15: 1º Grupo B vs 3º</td><td>Inferior</td></tr>
+          <tr><td><code>vs1K</code></td><td>R16-16: 1º Grupo K vs 3º</td><td>Inferior</td></tr>
+        </tbody>
+      </table>
+
+      <p class="subheading">Ejemplo — combinación ABCDEFGH</p>
+<div class="code-block"><span class="cm">// thirdPlaceTable.ts</span>
+<span class="str">"ABCDEFGH"</span>: {
+  <span class="str">"vs1A"</span>: <span class="str">"H"</span>,  <span class="cm">// 3º Grupo H (Arabia Saudí) vs 1º A</span>
+  <span class="str">"vs1B"</span>: <span class="str">"G"</span>,  <span class="cm">// 3º Grupo G (Irán) vs 1º B</span>
+  <span class="str">"vs1D"</span>: <span class="str">"B"</span>,  <span class="cm">// 3º Grupo B (Catar) vs 1º D</span>
+  <span class="str">"vs1E"</span>: <span class="str">"C"</span>,  <span class="cm">// 3º Grupo C (Haití) vs 1º E</span>
+  <span class="str">"vs1G"</span>: <span class="str">"A"</span>,  <span class="cm">// 3º Grupo A (Corea del Sur) vs 1º G</span>
+  <span class="str">"vs1I"</span>: <span class="str">"F"</span>,  <span class="cm">// 3º Grupo F (Suecia) vs 1º I</span>
+  <span class="str">"vs1K"</span>: <span class="str">"D"</span>,  <span class="cm">// 3º Grupo D (Australia) vs 1º K</span>
+  <span class="str">"vs1L"</span>: <span class="str">"E"</span>   <span class="cm">// 3º Grupo E (C. Marfil) vs 1º L</span>
+}</div>
+    </section>
+
+    <!-- DESARROLLO -->
+    <section class="doc-section" id="desarrollo">
+      <div class="section-header">
+        <span class="section-number">06</span>
+        <h2 class="section-title">Fases de desarrollo</h2>
+      </div>
+
+      <p style="font-size: 14px; color: var(--text-2); margin-bottom: 1.5rem;">Desarrollo ejecutado en 6 fases secuenciales usando Claude Code, con <code>PLAN_PORRA_MUNDIAL_2026.md</code> como documento de especificación y contexto persistente entre prompts.</p>
+
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-marker"><div class="tl-dot done"></div></div>
+          <div class="tl-content">
+            <div class="tl-phase">Fase 0 · Supabase <span class="badge badge-green">completado</span></div>
+            <div class="tl-desc">Creación del proyecto en región EU West (París). Diseño de tabla <code>apuestas</code>. Política RLS de INSERT anónimo. Obtención de URL y anon key para las variables de entorno.</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-marker"><div class="tl-dot done"></div></div>
+          <div class="tl-content">
+            <div class="tl-phase">Fase 1 · Scaffold + datos <span class="badge badge-green">completado</span></div>
+            <div class="tl-desc">Inicialización de Next.js 14 con App Router, TypeScript y Tailwind CSS. Definición de tipos base. Datos de los 12 grupos, 48 equipos y emparejamientos de 1/16.</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-marker"><div class="tl-dot done"></div></div>
+          <div class="tl-content">
+            <div class="tl-phase">Fase 2 · Algoritmo de terceros <span class="badge badge-green">completado</span></div>
+            <div class="tl-desc">Generación de la tabla lookup con las 495 combinaciones FIFA desde el Excel oficial. Implementación de <code>thirdPlaceTable.ts</code> y función <code>assignThirdPlaceTeams</code>.</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-marker"><div class="tl-dot done"></div></div>
+          <div class="tl-content">
+            <div class="tl-phase">Fase 3 · Wizard + UI <span class="badge badge-green">completado</span></div>
+            <div class="tl-desc">Wizard multi-paso con stepper visual. Validación por fase (no avanzar si la fase no está completa). Diseño responsive mobile-first. Selector de terceros integrado con la lógica FIFA.</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-marker"><div class="tl-dot done"></div></div>
+          <div class="tl-content">
+            <div class="tl-phase">Fase 4 · Generación de PDF <span class="badge badge-green">completado</span></div>
+            <div class="tl-desc">Bracket visual con <code>@react-pdf/renderer</code>, generado completamente en el navegador. Sin servidor ni funciones serverless — compatible con Vercel free tier.</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-marker"><div class="tl-dot done"></div></div>
+          <div class="tl-content">
+            <div class="tl-phase">Fase 5 · Integración Supabase <span class="badge badge-green">completado</span></div>
+            <div class="tl-desc">Envío de predicciones a Supabase al generar el PDF. Variables de entorno en <code>.env.local</code> (fuera del repositorio).</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-marker"><div class="tl-dot done"></div></div>
+          <div class="tl-content">
+            <div class="tl-phase">Fase 6 · Despliegue <span class="badge badge-green">completado</span></div>
+            <div class="tl-desc">Repositorio creado con <code>gh</code> CLI. Importación en Vercel. Variables de entorno configuradas en el panel de Vercel. App en producción y enlace compartido con el equipo de El País.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BUGS -->
+    <section class="doc-section" id="bugs">
+      <div class="section-header">
+        <span class="section-number">07</span>
+        <h2 class="section-title">Bugs resueltos</h2>
+      </div>
+
+      <div class="alert error">
+        <div class="alert-title">🐛 Bug: slots <code>vs1I</code> y <code>vs1B</code> intercambiados en la UI</div>
+        <div class="alert-body">
+          La tabla <code>thirdPlaceTable.ts</code> era correcta, pero la capa de emparejamientos del bracket tenía los dos slots intercambiados en <code>data.ts</code>.<br><br>
+          Ejemplo con combinación ABCDEFGH:<br>
+          · <code>vs1I</code> devolvía 3º Grupo G (Irán) ← incorrecto<br>
+          · <code>vs1B</code> devolvía 3º Grupo F (Suecia) ← incorrecto
+        </div>
+      </div>
+
+      <div class="alert success">
+        <div class="alert-title">✓ Solución aplicada</div>
+        <div class="alert-body">
+          Se corrigió el cableado en <code>data.ts</code> verificando que cada partido de 1/16 que involucra un tercero apunte al slot correcto:<br><br>
+          · R16-2 (1º Grupo I) → slot <code>vs1I</code> → 3º Grupo F (Suecia) ✓<br>
+          · R16-15 (1º Grupo B) → slot <code>vs1B</code> → 3º Grupo G (Irán) ✓
+        </div>
+      </div>
+
+      <div class="card" style="margin-top: 1.5rem;">
+        <div class="card-title"><span class="icon">📊</span> Bug Google Sheets: clave de Supabase incorrecta</div>
+        <div class="card-body">
+          Al configurar el script de Apps Script para exportar las apuestas a Google Sheets, se usó la <code>publishable key</code> (anon key) en lugar de la <code>service_role key</code>.<br><br>
+          La política RLS bloquea SELECT para el rol <code>anon</code>, por lo que el script devolvía 0 resultados.<br><br>
+          <strong>Solución:</strong> usar la service_role key (JWT largo, empieza por <code>eyJhbGciOi...</code>) únicamente en el entorno del Apps Script, que es privado. La service_role key bypasea RLS y tiene acceso completo a la tabla.
+        </div>
+      </div>
+    </section>
+
+    <!-- OPERACIONES -->
+    <section class="doc-section" id="ops">
+      <div class="section-header">
+        <span class="section-number">08</span>
+        <h2 class="section-title">Operaciones</h2>
+      </div>
+
+      <p class="subheading">Google Sheets: exportar y puntuar durante el torneo</p>
+      <div class="card">
+        <div class="card-body">
+          Script de Google Apps Script que sincroniza los datos de Supabase con una hoja de cálculo. Tiene dos hojas:<br><br>
+          <strong>Predicciones</strong> — se rellena automáticamente desde Supabase con: fecha · nombre · sección · equipos por fase · puntos por fase · total puntos.<br><br>
+          <strong>Resultados</strong> — se rellena manualmente con los equipos reales que van pasando cada fase. Las celdas están en amarillo.<br><br>
+          El script compara ambas hojas y calcula los puntos. Menú personalizado con tres acciones: <em>Actualizar predicciones</em>, <em>Recalcular puntos</em> y <em>Actualizar todo</em>. Opcionalmente configurable para auto-actualizar cada hora.
+        </div>
+      </div>
+
+      <div class="alert warn">
+        <div class="alert-title">⚠️ Atención con los nombres de equipo</div>
+        <div class="alert-body">Los nombres en la hoja "Resultados" deben coincidir <strong>exactamente</strong> con los de la app (tildes incluidas). Un carácter distinto = no cuenta como acierto. Nombres críticos: <code>España</code>, <code>EE UU</code>, <code>C. Marfil</code>, <code>Bosnia y H.</code>, <code>N. Zelanda</code>, <code>Arabia Saudí</code>.</div>
+      </div>
+
+      <p class="subheading">Supabase: mantenimiento</p>
+      <div class="two-col">
+        <div class="card">
+          <div class="card-title"><span class="icon">🔐</span> GRANT ejecutado (oct 2026)</div>
+          <div class="card-body">
+            <code>GRANT INSERT ON public.apuestas TO anon;</code><br><br>
+            Ejecutado en el SQL Editor de Supabase. No requiere más acción. <span class="badge badge-green">listo</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title"><span class="icon">🛡️</span> Security Advisor</div>
+          <div class="card-body">
+            0 errores · 3 warnings ignorables.<br><br>
+            Revisar periódicamente en: <em>Supabase Dashboard → Advisors → Security</em>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer class="site-footer">
+  <p>Porra Mundial 2026 · El País · Documentación generada en mayo 2026 · Next.js + Supabase + Vercel</p>
+</footer>
+
+<script>
+  const sections = document.querySelectorAll('.doc-section');
+  const navLinks = document.querySelectorAll('.nav-list a');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`.nav-list a[href="#${entry.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>
