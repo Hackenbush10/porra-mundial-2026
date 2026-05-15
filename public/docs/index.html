@@ -322,7 +322,7 @@
   <div class="header-inner">
     <p class="header-eyebrow">El País · Documentación técnica · Mayo 2026</p>
     <h1 class="header-title">Porra <em>Mundial</em> 2026</h1>
-    <p class="header-sub">App web de predicciones para el Mundial 2026. Bracket interactivo fase a fase, generación de PDF y almacenamiento en base de datos. Desarrollada para los compañeros de El País.</p>
+    <p class="header-sub">App web de predicciones para el Mundial 2026. Bracket interactivo visual, relleno aleatorio, generación de PDF con logo oficial y panel de administración. Desarrollada para los compañeros de El País.</p>
     <div class="header-badges">
       <span class="hbadge live"><span class="dot"></span> En producción (Vercel)</span>
       <span class="hbadge">Next.js 14 + TypeScript</span>
@@ -350,6 +350,7 @@
       <li><a href="#desarrollo">Fases de desarrollo</a></li>
       <li><a href="#bugs">Bugs resueltos</a></li>
       <li><a href="#ops">Operaciones</a></li>
+      <li><a href="#admin">Panel Admin</a></li>
     </ul>
   </nav>
 
@@ -384,11 +385,21 @@
       <div class="card">
         <div class="card-title"><span class="icon">⚙️</span> ¿Qué es y cómo funciona?</div>
         <div class="card-body">
-          Un usuario abre la app, introduce su <strong>nombre</strong> y <strong>sección</strong> (texto libre), y rellena sus predicciones del Mundial 2026 fase a fase en un asistente tipo <em>wizard</em>:<br><br>
-          <strong>Grupos → 1/16 → 1/8 → Cuartos → Semis → Final → Campeón</strong><br><br>
-          Al terminar, genera un <strong>PDF con el bracket visual</strong> completo y las predicciones quedan guardadas automáticamente en Supabase. La app se comparte con un enlace público y no requiere autenticación.
+          Un usuario abre la app, introduce su <strong>nombre</strong> y <strong>sección</strong> (texto libre), y rellena sus predicciones del Mundial 2026. Primero clasifica los grupos, luego selecciona los 8 mejores terceros, y a continuación completa la <strong>fase final en un bracket interactivo visual</strong> donde va haciendo clic en los equipos que avanzan:<br><br>
+          <strong>Grupos → Mejores terceros → Bracket interactivo (1/16 → 1/8 → 1/4 → Semis → Final → Campeón)</strong><br><br>
+          El bracket muestra las dos mitades del cuadro con la final en el centro. El usuario puede corregir cualquier selección y los cambios se propagan en cascada. Al terminar, genera un <strong>PDF con el bracket visual</strong> (con el logo oficial del Mundial 2026, hora de España peninsular) y las predicciones quedan guardadas automáticamente en Supabase. Cada paso incluye un botón de <strong>relleno aleatorio 🎲</strong> para rellenar rápidamente.<br><br>
+          La app se comparte con un enlace público y no requiere autenticación.
         </div>
       </div>
+
+      <p class="subheading">Rutas de la aplicación</p>
+      <ul class="decision-list">
+        <li><code>/</code> — Versión principal (v2) con bracket interactivo visual</li>
+        <li><code>/v1</code> — Versión original con wizard paso a paso (conservada por compatibilidad)</li>
+        <li><code>/v2</code> — Redirige automáticamente a <code>/</code></li>
+        <li><code>/admin</code> — Panel de administración: listado de apuestas con buscador, columnas ordenables y descarga de PDF por apuesta</li>
+        <li><code>/docs</code> — Esta documentación técnica (HTML estático)</li>
+      </ul>
 
       <p class="subheading">Decisiones de diseño confirmadas</p>
       <ul class="decision-list">
@@ -398,6 +409,9 @@
         <li>Sin referencias a sedes ni fechas — solo fases</li>
         <li>Política RLS anónima de solo INSERT en Supabase — anon key segura en el frontend</li>
         <li>Sin autenticación — cualquiera con el enlace puede participar</li>
+        <li>Título en cabecera: "Generador de Porras del Mundial 2026" — "Creado por Rodrigo Silva"</li>
+        <li>PDF con logo oficial del Mundial 2026 y hora de España peninsular (Europe/Madrid)</li>
+        <li>Anti-duplicados: tras guardar la apuesta en Supabase, solo se permite reintentar descarga de PDF, no un segundo INSERT</li>
       </ul>
     </section>
 
@@ -444,11 +458,12 @@
       <p class="subheading">Variables de entorno (Vercel + <code>.env.local</code>)</p>
 <div class="code-block"><span class="cm"># .env.local — no commitear</span>
 <span class="kw">NEXT_PUBLIC_SUPABASE_URL</span>=<span class="str">https://[proyecto].supabase.co</span>
-<span class="kw">NEXT_PUBLIC_SUPABASE_ANON_KEY</span>=<span class="str">eyJhbGciOi...</span></div>
+<span class="kw">NEXT_PUBLIC_SUPABASE_ANON_KEY</span>=<span class="str">eyJhbGciOi...</span>
+<span class="kw">SUPABASE_SERVICE_ROLE_KEY</span>=<span class="str">eyJhbGciOi...</span>  <span class="cm"># solo servidor (/admin)</span></div>
 
       <div class="alert info">
-        <div class="alert-title">ℹ️ Sobre la anon key en el frontend</div>
-        <div class="alert-body">La anon key es segura para exponer en el frontend <strong>si y solo si</strong> las políticas RLS están bien configuradas (solo INSERT permitido para <code>anon</code>). La service_role key —que tiene acceso total— solo se usa en Google Apps Script, que es privado.</div>
+        <div class="alert-title">ℹ️ Sobre las claves de Supabase</div>
+        <div class="alert-body">La anon key (con prefijo <code>NEXT_PUBLIC_</code>) es segura para exponer en el frontend <strong>si y solo si</strong> las políticas RLS están bien configuradas (solo INSERT permitido para <code>anon</code>). La <code>SUPABASE_SERVICE_ROLE_KEY</code> (sin prefijo <code>NEXT_PUBLIC_</code>) tiene acceso total, bypasea RLS, y solo se usa en la API route del servidor para el panel <code>/admin</code>. En Vercel se configura como variable "Sensitive" (solo Production y Preview).</div>
       </div>
     </section>
 
@@ -629,8 +644,36 @@
         <div class="tl-item">
           <div class="tl-marker"><div class="tl-dot done"></div></div>
           <div class="tl-content">
-            <div class="tl-phase">Fase 6 · Despliegue <span class="badge badge-green">completado</span></div>
-            <div class="tl-desc">Repositorio creado con <code>gh</code> CLI. Importación en Vercel. Variables de entorno configuradas en el panel de Vercel. App en producción y enlace compartido con el equipo de El País.</div>
+            <div class="tl-phase">Fase 6 · Despliegue v1 <span class="badge badge-green">completado</span></div>
+            <div class="tl-desc">Repositorio creado con <code>gh</code> CLI. Importación en Vercel. Variables de entorno configuradas en el panel de Vercel. App v1 en producción.</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-marker"><div class="tl-dot done"></div></div>
+          <div class="tl-content">
+            <div class="tl-phase">Fase 7 · v2: Bracket interactivo <span class="badge badge-green">completado</span></div>
+            <div class="tl-desc">Nueva versión con bracket visual completo (9 columnas: dieciseisavos → final en el centro). Interacción por clic con cascada de corrección. Inicialmente en <code>/v2</code>, después promovida a ruta principal <code>/</code>. Reutiliza componentes de grupos y terceros de v1.</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-marker"><div class="tl-dot done"></div></div>
+          <div class="tl-content">
+            <div class="tl-phase">Fase 8 · Mejoras v2 <span class="badge badge-green">completado</span></div>
+            <div class="tl-desc">Botón de relleno aleatorio 🎲 en grupos, terceros y fase final. Logo oficial del Mundial 2026 en el PDF. Hora de España peninsular (<code>Europe/Madrid</code>) en la cabecera del PDF. Título y crédito en la página: "Generador de Porras del Mundial 2026 · Creado por Rodrigo Silva". Botón "Crear nueva porra" tras generar PDF. Lógica anti-duplicados en Supabase (solo un INSERT por apuesta, reintentar solo descarga PDF).</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-marker"><div class="tl-dot done"></div></div>
+          <div class="tl-content">
+            <div class="tl-phase">Fase 9 · Panel /admin <span class="badge badge-green">completado</span></div>
+            <div class="tl-desc">Ruta <code>/admin</code> (no enlazada públicamente) con listado de todas las apuestas. Buscador por nombre. Columnas ordenables (nombre, sección, campeón, fecha) ascendente/descendente. Botón "Descargar PDF" por fila para regenerar PDFs desde los datos de Supabase. Usa <code>SUPABASE_SERVICE_ROLE_KEY</code> en la API route del servidor.</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-marker"><div class="tl-dot done"></div></div>
+          <div class="tl-content">
+            <div class="tl-phase">Fase 10 · Reorganización de rutas <span class="badge badge-green">completado</span></div>
+            <div class="tl-desc">v2 promovida a ruta principal <code>/</code>. v1 conservada en <code>/v1</code>. Redirect automático de <code>/v2</code> a <code>/</code> en <code>next.config.js</code>. Documentación estática en <code>/docs</code>.</div>
           </div>
         </div>
       </div>
@@ -668,6 +711,30 @@
           Al configurar el script de Apps Script para exportar las apuestas a Google Sheets, se usó la <code>publishable key</code> (anon key) en lugar de la <code>service_role key</code>.<br><br>
           La política RLS bloquea SELECT para el rol <code>anon</code>, por lo que el script devolvía 0 resultados.<br><br>
           <strong>Solución:</strong> usar la service_role key (JWT largo, empieza por <code>eyJhbGciOi...</code>) únicamente en el entorno del Apps Script, que es privado. La service_role key bypasea RLS y tiene acceso completo a la tabla.
+        </div>
+      </div>
+
+      <div class="alert error" style="margin-top: 1.5rem;">
+        <div class="alert-title">🐛 Bug: HTTP 500 en /admin (Vercel) — "supabaseKey is required"</div>
+        <div class="alert-body">
+          El panel <code>/admin</code> funcionaba en local pero devolvía HTTP 500 en producción. Los logs de Vercel mostraban: <code>Error: supabaseKey is required</code>.<br><br>
+          <strong>Causa:</strong> la variable <code>SUPABASE_SERVICE_ROLE_KEY</code> se había pegado en Vercel con saltos de línea (el JWT quedaba partido en varias líneas), por lo que Vercel no la leía correctamente.<br><br>
+          <strong>Solución:</strong> borrar la variable en Vercel, volver a crearla asegurándose de pegarla en una sola línea continua, y hacer redeploy.
+        </div>
+      </div>
+
+      <div class="alert success" style="margin-top: 1rem;">
+        <div class="alert-title">✓ Solución aplicada</div>
+        <div class="alert-body">
+          Variable recreada sin saltos de línea. Redeploy ejecutado. <code>/admin</code> funciona correctamente en producción.
+        </div>
+      </div>
+
+      <div class="card" style="margin-top: 1.5rem;">
+        <div class="card-title"><span class="icon">🔌</span> Bug: HTTP 500 al guardar apuesta desde v2</div>
+        <div class="card-body">
+          El PDF se generaba correctamente pero la apuesta no se guardaba en Supabase (HTTP 500). La estructura del JSON que enviaba la v2 no coincidía exactamente con lo que esperaba la API route.<br><br>
+          <strong>Solución:</strong> ajustar la estructura de datos que envía el componente de v2 para que coincida con el esquema de la tabla <code>apuestas</code> en Supabase.
         </div>
       </div>
     </section>
@@ -713,11 +780,36 @@
       </div>
     </section>
 
+    <!-- PANEL ADMIN -->
+    <section class="doc-section" id="admin">
+      <div class="section-header">
+        <span class="section-number">09</span>
+        <h2 class="section-title">Panel Admin</h2>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="icon">🔧</span> Ruta /admin — gestión de apuestas</div>
+        <div class="card-body">
+          Panel privado (no enlazado públicamente) para administrar las apuestas guardadas. Accesible solo conociendo la URL directa. No requiere autenticación adicional.<br><br>
+          <strong>Funcionalidades:</strong><br>
+          · Listado completo de todas las apuestas en tabla<br>
+          · Columnas: #, Nombre, Sección, Campeón, Fecha<br>
+          · Todas las columnas son ordenables (clic en cabecera: ascendente ▲ / descendente ▼)<br>
+          · Buscador por nombre en la parte superior<br>
+          · Botón "Descargar PDF" por cada fila — regenera el PDF con los datos de Supabase<br><br>
+          <strong>Implementación técnica:</strong><br>
+          · API route <code>GET /api/apuestas</code> usando <code>SUPABASE_SERVICE_ROLE_KEY</code> (server-side, bypasea RLS)<br>
+          · La service_role key nunca se expone al cliente (sin prefijo <code>NEXT_PUBLIC_</code>)<br>
+          · En Vercel, configurada como variable "Sensitive" (solo Production y Preview)
+        </div>
+      </div>
+    </section>
+
   </main>
 </div>
 
 <footer class="site-footer">
-  <p>Porra Mundial 2026 · El País · Documentación generada en mayo 2026 · Next.js + Supabase + Vercel</p>
+  <p>Porra Mundial 2026 · El País · Documentación actualizada en mayo 2026 · Next.js + Supabase + Vercel</p>
 </footer>
 
 <script>
