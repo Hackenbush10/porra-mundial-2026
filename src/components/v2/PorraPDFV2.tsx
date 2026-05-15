@@ -207,11 +207,17 @@ export function PorraPDFV2({
     [MX_SF_FIN, FINAL_Y, X_FINAL, FINAL_Y],
   ];
 
-  const today = new Date().toLocaleDateString('es-ES', {
+  const now = new Date();
+  const today = now.toLocaleDateString('es-ES', {
+    timeZone: 'Europe/Madrid',
     day: '2-digit',
     month: 'long',
     year: 'numeric',
-  });
+  }) + ' · ' + now.toLocaleString('es-ES', {
+    timeZone: 'Europe/Madrid',
+    hour: '2-digit',
+    minute: '2-digit',
+  }) + 'h';
 
   // Logo dimensions: SVG is ~454×701 (portrait). Fit inside 30pt header height.
   const LOGO_H = 30;
