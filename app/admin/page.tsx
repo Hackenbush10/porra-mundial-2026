@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useDeferredValue } from 'react';
+import { useEffect, useState, useDeferredValue, useCallback } from 'react';
 import { assignThirdPlaces } from '@/lib/thirdPlace';
 import type {
   GroupLetter,
@@ -95,6 +95,11 @@ async function downloadRowPdf(row: ApuestaRow): Promise<void> {
   URL.revokeObjectURL(url);
 }
 
+// ─── Sort types ──────────────────────────────────────────────────────────────
+
+type SortKey = 'index' | 'nombre' | 'seccion' | 'campeon' | 'created_at';
+type SortDir = 'asc' | 'desc';
+
 // ─── Main component ───────────────────────────────────────────────────────────
 
 export default function AdminPage() {
@@ -104,6 +109,8 @@ export default function AdminPage() {
   const [search, setSearch] = useState('');
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const [pdfErrors, setPdfErrors] = useState<Record<string, string>>({});
+  const [sortKey, setSortKey] = useState<SortKey>('created_at');
+  const [sortDir, setSortDir] = useState<SortDir>('desc');
 
   const deferredSearch = useDeferredValue(search);
 
@@ -121,11 +128,32 @@ export default function AdminPage() {
       .finally(() => setLoading(false));
   }, []);
 
+  const handleSort = useCallback((key: SortKey) => {
+    setSortKey((prev) => {
+      if (prev === key) setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'));
+      else { setSortDir('asc'); }
+      return key;
+    });
+  }, []);
+
   const filtered = deferredSearch.trim()
     ? apuestas.filter((a) =>
         a.nombre.toLowerCase().includes(deferredSearch.trim().toLowerCase()),
       )
     : apuestas;
+
+  const sorted = [...filtered].sort((a, b) => {
+    let cmp = 0;
+    if (sortKey === 'index') {
+      // index is position in the filtered array — already stable, no-op sort
+      cmp = 0;
+    } else if (sortKey === 'created_at') {
+      cmp = a.created_at.localeCompare(b.created_at);
+    } else {
+      cmp = a[sortKey].localeCompare(b[sortKey], 'es', { sensitivity: 'base' });
+    }
+    return sortDir === 'asc' ? cmp : -cmp;
+  });
 
   const handleDownload = async (row: ApuestaRow) => {
     setDownloadingId(row.id);
@@ -205,16 +233,35 @@ export default function AdminPage() {
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="bg-gray-50 border-b border-gray-200">
-                      <th className="text-left px-4 py-3 font-medium text-gray-600 whitespace-nowrap">#</th>
-                      <th className="text-left px-4 py-3 font-medium text-gray-600 whitespace-nowrap">Nombre</th>
-                      <th className="text-left px-4 py-3 font-medium text-gray-600 whitespace-nowrap">Sección</th>
-                      <th className="text-left px-4 py-3 font-medium text-gray-600 whitespace-nowrap">Campeón</th>
-                      <th className="text-left px-4 py-3 font-medium text-gray-600 whitespace-nowrap">Fecha</th>
+                      {(
+                        [
+                          { key: 'index', label: '#' },
+                          { key: 'nombre', label: 'Nombre' },
+                          { key: 'seccion', label: 'Sección' },
+                          { key: 'campeon', label: 'Campeón' },
+                          { key: 'created_at', label: 'Fecha' },
+                        ] as { key: SortKey; label: string }[]
+                      ).map(({ key, label }) => (
+                        <th
+                          key={key}
+                          onClick={() => handleSort(key)}
+                          className="text-left px-4 py-3 font-medium text-gray-600 whitespace-nowrap cursor-pointer select-none hover:text-gray-900 hover:bg-gray-100 transition-colors"
+                        >
+                          <span className="inline-flex items-center gap-1">
+                            {label}
+                            {sortKey === key ? (
+                              <span className="text-emerald-600">{sortDir === 'asc' ? '▲' : '▼'}</span>
+                            ) : (
+                              <span className="text-gray-300">▼</span>
+                            )}
+                          </span>
+                        </th>
+                      ))}
                       <th className="px-4 py-3" />
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100">
-                    {filtered.map((row, i) => (
+                    {sorted.map((row, i) => (
                       <tr key={row.id} className="hover:bg-gray-50 transition-colors">
                         <td className="px-4 py-3 text-gray-400 font-mono text-xs">{i + 1}</td>
                         <td className="px-4 py-3 font-medium text-gray-900">{row.nombre}</td>
