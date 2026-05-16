@@ -357,6 +357,72 @@ export function PorraPDFV2({
             </Text>
           </View>
 
+          {/* ── Scoring + prizes info (below champion box) ───────────────────── */}
+          <View style={{ position: 'absolute', left: X_CHAMP, top: FINAL_Y + 28, width: CHAMP_W }}>
+            {/* Cost row */}
+            <View style={{
+              flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+              backgroundColor: '#f9fafb', borderRadius: 2,
+              paddingHorizontal: 5, paddingVertical: 3, marginBottom: 5,
+            }}>
+              <Text style={{ fontSize: 5.5, color: '#b45309', fontFamily: 'Helvetica-Bold' }}>PARTICIPACIÓN</Text>
+              <Text style={{ fontSize: 5.5, color: '#b45309', fontFamily: 'Helvetica-Bold' }}>10 €</Text>
+            </View>
+
+            {/* Scoring header */}
+            <Text style={{ fontSize: 5.5, color: '#b45309', fontFamily: 'Helvetica-Bold', marginBottom: 2, paddingHorizontal: 2 }}>
+              PUNTUACIÓN
+            </Text>
+
+            {/* Scoring rows */}
+            {([
+              ['Dieciseisavofinalista acertado', '1 pt'],
+              ['Octavofinalista acertado', '2 pts'],
+              ['Cuartofinalista acertado', '5 pts'],
+              ['Semifinalista acertado', '7 pts'],
+              ['Finalista acertado', '10 pts'],
+              ['Campeon acertado', '10 pts'],
+            ] as [string, string][]).map(([phase, pts], i) => (
+              <View key={i} style={{
+                flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+                backgroundColor: '#f9fafb',
+                paddingHorizontal: 5, paddingVertical: 2.5,
+              }}>
+                <Text style={{ fontSize: 5, color: '#374151', fontFamily: 'Helvetica' }}>{phase}</Text>
+                <Text style={{ fontSize: 5, color: '#b45309', fontFamily: 'Helvetica-Bold' }}>{pts}</Text>
+              </View>
+            ))}
+
+            {/* Prizes header */}
+            <Text style={{ fontSize: 5.5, color: '#b45309', fontFamily: 'Helvetica-Bold', marginTop: 6, marginBottom: 2, paddingHorizontal: 2 }}>
+              REPARTO DEL BOTE
+            </Text>
+
+            {/* Prize rows */}
+            {([
+              ['1.º Primero', '50%'],
+              ['2.º Segundo', '30%'],
+              ['3.º Tercero', '20%'],
+            ] as [string, string][]).map(([pos, pct], i) => (
+              <View key={i} style={{
+                flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+                backgroundColor: '#f9fafb',
+                paddingHorizontal: 5, paddingVertical: 2.5,
+              }}>
+                <Text style={{ fontSize: 5.5, color: '#374151', fontFamily: 'Helvetica' }}>{pos}</Text>
+                <Text style={{ fontSize: 5.5, color: '#b45309', fontFamily: 'Helvetica-Bold' }}>{pct}</Text>
+              </View>
+            ))}
+
+            {/* Note */}
+            <Text style={{
+              fontSize: 4.5, color: '#9ca3af', fontFamily: 'Helvetica',
+              marginTop: 5, paddingHorizontal: 2, lineHeight: 1.5,
+            }}>
+              * No es necesario acertar la zona del cuadro. Si un equipo pasa de fase, suma puntos independientemente de su clasificacion de grupo.
+            </Text>
+          </View>
+
           <Svg
             style={{ position: 'absolute', left: 0, top: 0, width: PAGE_W, height: PAGE_H }}
             viewBox={`0 0 ${PAGE_W} ${PAGE_H}`}
