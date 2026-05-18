@@ -78,6 +78,7 @@ function PhaseSection({ title, matches, cols = 2 }: { title: string; matches: Re
 interface Props {
   nombre: string;
   seccion: string;
+  email: string;
   grupos: GruposState;
   mejoresTerceros: GroupLetter[];
   thirdPlaceAssignment: ThirdPlaceAssignment | null;
@@ -97,6 +98,7 @@ type SaveStatus = 'idle' | 'busy' | 'saved_ok' | 'saved_pdf_fail' | 'save_fail';
 export default function BracketPreviewV2({
   nombre,
   seccion,
+  email,
   grupos,
   mejoresTerceros,
   thirdPlaceAssignment,
@@ -154,6 +156,7 @@ export default function BracketPreviewV2({
         body: JSON.stringify({
           nombre,
           seccion,
+          email,
           grupos,
           mejores_terceros: mejoresTerceros,
           bracket: { r16: bracket.r16, r8: bracket.r8, qf: bracket.qf, sf: bracket.sf, final: bracket.final },

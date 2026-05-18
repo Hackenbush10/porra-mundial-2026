@@ -26,6 +26,7 @@ interface ApuestaRow {
   id: string;
   nombre: string;
   seccion: string;
+  email: string | null;
   campeon: string;
   created_at: string;
   grupos: GruposState;
@@ -97,7 +98,7 @@ async function downloadRowPdf(row: ApuestaRow): Promise<void> {
 
 // ─── Sort types ──────────────────────────────────────────────────────────────
 
-type SortKey = 'index' | 'nombre' | 'seccion' | 'campeon' | 'created_at';
+type SortKey = 'index' | 'nombre' | 'seccion' | 'email' | 'campeon' | 'created_at';
 type SortDir = 'asc' | 'desc';
 
 // ─── Main component ───────────────────────────────────────────────────────────
@@ -145,10 +146,11 @@ export default function AdminPage() {
   const sorted = [...filtered].sort((a, b) => {
     let cmp = 0;
     if (sortKey === 'index') {
-      // index is position in the filtered array — already stable, no-op sort
       cmp = 0;
     } else if (sortKey === 'created_at') {
       cmp = a.created_at.localeCompare(b.created_at);
+    } else if (sortKey === 'email') {
+      cmp = (a.email ?? '').localeCompare(b.email ?? '', 'es', { sensitivity: 'base' });
     } else {
       cmp = a[sortKey].localeCompare(b[sortKey], 'es', { sensitivity: 'base' });
     }
@@ -238,6 +240,7 @@ export default function AdminPage() {
                           { key: 'index', label: '#' },
                           { key: 'nombre', label: 'Nombre' },
                           { key: 'seccion', label: 'Sección' },
+                          { key: 'email', label: 'Email' },
                           { key: 'campeon', label: 'Campeón' },
                           { key: 'created_at', label: 'Fecha' },
                         ] as { key: SortKey; label: string }[]
@@ -266,6 +269,7 @@ export default function AdminPage() {
                         <td className="px-4 py-3 text-gray-400 font-mono text-xs">{i + 1}</td>
                         <td className="px-4 py-3 font-medium text-gray-900">{row.nombre}</td>
                         <td className="px-4 py-3 text-gray-600">{row.seccion}</td>
+                        <td className="px-4 py-3 text-gray-500 text-xs">{row.email ?? <span className="text-gray-300 italic">—</span>}</td>
                         <td className="px-4 py-3">
                           <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-medium text-xs">
                             <span>&#127942;</span>

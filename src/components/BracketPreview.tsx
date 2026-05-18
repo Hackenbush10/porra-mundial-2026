@@ -25,6 +25,7 @@ import {
 interface BracketPreviewProps {
   nombre: string;
   seccion: string;
+  email: string;
   grupos: GruposState;
   mejoresTerceros: GroupLetter[];
   thirdPlaceAssignment: ThirdPlaceAssignment | null;
@@ -90,6 +91,7 @@ function PhaseSection({
 export default function BracketPreview({
   nombre,
   seccion,
+  email,
   grupos,
   mejoresTerceros,
   thirdPlaceAssignment,
@@ -144,6 +146,7 @@ export default function BracketPreview({
         body: JSON.stringify({
           nombre,
           seccion,
+          email,
           grupos,
           mejores_terceros: mejoresTerceros,
           bracket: {

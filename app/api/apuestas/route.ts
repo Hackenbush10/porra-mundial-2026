@@ -29,7 +29,7 @@ export async function GET() {
   try {
     const { data, error } = await adminClient()
       .from('apuestas')
-      .select('id, nombre, seccion, campeon, created_at, grupos, mejores_terceros, bracket')
+      .select('id, nombre, seccion, email, campeon, created_at, grupos, mejores_terceros, bracket')
       .order('created_at', { ascending: false });
 
     if (error) {
@@ -89,6 +89,7 @@ export async function POST(req: NextRequest) {
   const { error } = await supabase.from('apuestas').insert({
     nombre: (data.nombre as string).trim(),
     seccion: (data.seccion as string).trim(),
+    email: typeof data.email === 'string' ? data.email.trim() : null,
     grupos: data.grupos,
     mejores_terceros: data.mejores_terceros,
     bracket: data.bracket,

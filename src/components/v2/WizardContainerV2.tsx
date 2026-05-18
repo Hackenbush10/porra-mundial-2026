@@ -65,6 +65,7 @@ export default function WizardContainerV2() {
   const [paso, setPaso] = useState(1);
   const [nombre, setNombre] = useState('');
   const [seccion, setSeccion] = useState('');
+  const [email, setEmail] = useState('');
   const [grupos, setGrupos] = useState<GruposState>({});
   const [mejoresTerceros, setMejoresTerceros] = useState<GroupLetter[]>([]);
   const [thirdPlaceAssignment, setThirdPlaceAssignment] =
@@ -153,6 +154,7 @@ export default function WizardContainerV2() {
   const handleReset = () => {
     setNombre('');
     setSeccion('');
+    setEmail('');
     setGrupos({});
     setMejoresTerceros([]);
     setThirdPlaceAssignment(null);
@@ -185,7 +187,7 @@ export default function WizardContainerV2() {
   const canAdvance = (): boolean => {
     switch (paso) {
       case 1:
-        return nombre.trim().length > 0 && seccion.trim().length > 0;
+        return nombre.trim().length > 0 && seccion.trim().length > 0 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
       case 2:
         return isGroupsComplete(grupos);
       case 3:
@@ -203,7 +205,7 @@ export default function WizardContainerV2() {
     if (canAdvance()) return null;
     switch (paso) {
       case 1:
-        return 'Rellena tu nombre y sección para continuar.';
+        return 'Rellena tu nombre, sección y email para continuar.';
       case 2: {
         const missing = GROUP_LETTERS.filter((g) => {
           const s = grupos[g];
@@ -229,9 +231,11 @@ export default function WizardContainerV2() {
           <DatosPersonales
             nombre={nombre}
             seccion={seccion}
+            email={email}
             onChange={(field, value) => {
               if (field === 'nombre') setNombre(value);
-              else setSeccion(value);
+              else if (field === 'seccion') setSeccion(value);
+              else setEmail(value);
             }}
           />
         );
@@ -282,6 +286,7 @@ export default function WizardContainerV2() {
           <BracketPreviewV2
             nombre={nombre}
             seccion={seccion}
+            email={email}
             grupos={grupos}
             mejoresTerceros={mejoresTerceros}
             thirdPlaceAssignment={thirdPlaceAssignment}
