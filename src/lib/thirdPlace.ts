@@ -19,7 +19,7 @@ export function assignThirdPlaces(
   const key = [...selectedGroups].sort().join('');
   const entry = THIRD_PLACE_TABLE[key];
 
-  return entry ?? null;
+  return (entry as ThirdPlaceAssignment) ?? null;
 }
 
 /**
