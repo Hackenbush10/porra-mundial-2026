@@ -31,6 +31,9 @@
     --amber: #A06010;
     --amber-light: #FDF4E7;
     --amber-text: #6A3D08;
+    --purple: #7A3AAB;
+    --purple-light: #F0E8FD;
+    --purple-text: #4A1A7A;
     --mono: 'DM Mono', monospace;
     --sans: 'DM Sans', sans-serif;
     --serif: 'DM Serif Display', serif;
@@ -49,7 +52,7 @@
     min-height: 100vh;
   }
 
-  /* HEADER */
+  /* ── HEADER ── */
   .site-header {
     background: var(--text);
     color: #F9F7F2;
@@ -60,774 +63,1113 @@
   .site-header::before {
     content: '⚽';
     position: absolute;
-    right: -20px;
-    top: -30px;
-    font-size: 180px;
+    right: -10px;
+    top: -40px;
+    font-size: 160px;
     opacity: 0.06;
     line-height: 1;
     pointer-events: none;
     user-select: none;
   }
-  .header-inner { max-width: 820px; margin: 0 auto; position: relative; }
+  .header-inner { max-width: 860px; margin: 0 auto; position: relative; z-index: 1; }
   .header-eyebrow {
     font-family: var(--mono);
     font-size: 11px;
-    letter-spacing: 1.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
     color: #9B9388;
     margin-bottom: 0.75rem;
-    text-transform: uppercase;
   }
   .header-title {
     font-family: var(--serif);
-    font-size: 48px;
-    line-height: 1.05;
+    font-size: clamp(28px, 5vw, 44px);
+    line-height: 1.1;
+    margin-bottom: 0.75rem;
     color: #F9F7F2;
-    margin-bottom: 0.6rem;
   }
-  .header-title em {
-    font-style: italic;
-    color: var(--accent);
-  }
-  .header-sub {
+  .header-title em { font-style: italic; color: #E8714A; }
+  .header-desc {
     font-size: 15px;
     color: #9B9388;
     max-width: 520px;
-    line-height: 1.7;
+    line-height: 1.65;
     margin-bottom: 1.75rem;
-    font-weight: 300;
   }
-  .header-badges { display: flex; gap: 10px; flex-wrap: wrap; }
-  .hbadge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 12px;
-    font-family: var(--mono);
-    padding: 5px 12px;
-    border-radius: 4px;
-    border: 1px solid #3A3630;
-    color: #C8C0B0;
+  .header-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 4px 10px; border-radius: 20px;
+    font-size: 12px; font-family: var(--mono); font-weight: 500;
+    background: rgba(249,247,242,0.08); color: #C8C0B0;
+    border: 1px solid rgba(249,247,242,0.12);
   }
-  .hbadge.live { border-color: #2A7A4B; color: #5EC98A; }
-  .hbadge .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  .chip-green { background: rgba(42,122,75,0.2); color: #6FD4A0; border-color: rgba(42,122,75,0.3); }
+  .chip-blue  { background: rgba(26,79,171,0.2); color: #90B4F5; border-color: rgba(26,79,171,0.3); }
+  .chip-amber { background: rgba(160,96,16,0.25); color: #F0B86A; border-color: rgba(160,96,16,0.4); }
 
-  /* LAYOUT */
-  .layout { display: flex; max-width: 1100px; margin: 0 auto; }
+  /* ── LAYOUT ── */
+  .layout {
+    display: flex;
+    max-width: 900px;
+    margin: 0 auto;
+    min-height: calc(100vh - 200px);
+  }
 
-  /* SIDEBAR */
+  /* ── SIDEBAR ── */
   .sidebar {
     width: 200px;
     flex-shrink: 0;
-    padding: 2rem 0 2rem 1.5rem;
+    padding: 2rem 0;
     position: sticky;
     top: 0;
     height: 100vh;
     overflow-y: auto;
+    border-right: 1px solid var(--border);
   }
   .sidebar-label {
     font-family: var(--mono);
     font-size: 10px;
-    letter-spacing: 1.5px;
-    color: var(--text-3);
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    margin-bottom: 0.75rem;
-    padding-left: 0.75rem;
+    color: var(--text-3);
+    padding: 0 1.25rem;
+    margin-bottom: 0.5rem;
   }
-  .nav-list { list-style: none; }
-  .nav-list li a {
-    display: block;
-    padding: 6px 12px;
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0.45rem 1.25rem;
     font-size: 13px;
     color: var(--text-2);
+    cursor: pointer;
     text-decoration: none;
     border-left: 2px solid transparent;
-    border-radius: 0 var(--radius) var(--radius) 0;
-    transition: all 0.15s;
-    line-height: 1.4;
+    transition: color 0.15s, border-color 0.15s, background 0.15s;
+    line-height: 1.3;
   }
-  .nav-list li a:hover { color: var(--text); border-left-color: var(--border-strong); background: var(--surface-2); }
-  .nav-list li a.active { color: var(--accent); border-left-color: var(--accent); background: var(--accent-light); font-weight: 500; }
-  .nav-divider { height: 1px; background: var(--border); margin: 0.75rem 0.75rem; }
-
-  /* MAIN */
-  .main { flex: 1; min-width: 0; padding: 2.5rem 2rem 4rem; }
-
-  /* SECTIONS */
-  .doc-section { margin-bottom: 3.5rem; scroll-margin-top: 2rem; }
-  .section-header { display: flex; align-items: baseline; gap: 0.75rem; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border); }
-  .section-number { font-family: var(--mono); font-size: 12px; color: var(--text-3); min-width: 24px; }
-  .section-title { font-family: var(--serif); font-size: 28px; color: var(--text); line-height: 1.1; }
-
-  /* STATS ROW */
-  .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 1.5rem; }
-  .stat-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 1.1rem 1.2rem;
+  .nav-item:hover { color: var(--text); background: var(--surface-2); }
+  .nav-item.active { color: var(--accent-text); border-left-color: var(--accent); font-weight: 500; background: var(--accent-light); }
+  .nav-number {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-3);
+    min-width: 14px;
   }
-  .stat-label { font-size: 11px; color: var(--text-3); font-family: var(--mono); letter-spacing: 0.5px; margin-bottom: 6px; }
-  .stat-value { font-size: 28px; font-family: var(--serif); color: var(--text); line-height: 1; }
-  .stat-unit { font-size: 13px; color: var(--text-3); font-family: var(--sans); font-weight: 300; }
+  .nav-item.active .nav-number { color: var(--accent); }
+  .sidebar-divider { height: 1px; background: var(--border); margin: 0.75rem 1.25rem; }
 
-  /* CARDS */
+  /* ── CONTENT ── */
+  .content {
+    flex: 1;
+    padding: 2.5rem 2rem 4rem;
+    min-width: 0;
+  }
+
+  /* ── SECTIONS ── */
+  .section { margin-bottom: 3.5rem; }
+  .section:last-child { margin-bottom: 0; }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-3);
+    min-width: 20px;
+  }
+  .section-title {
+    font-family: var(--serif);
+    font-size: 22px;
+    color: var(--text);
+    line-height: 1.2;
+  }
+
+  /* ── CARDS ── */
   .card {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
-    padding: 1.25rem 1.4rem;
+    padding: 1.25rem 1.5rem;
     margin-bottom: 1rem;
   }
+  .card:last-child { margin-bottom: 0; }
   .card-title {
-    font-size: 13px;
     font-weight: 500;
-    color: var(--text);
-    margin-bottom: 0.6rem;
+    font-size: 14px;
+    margin-bottom: 0.5rem;
     display: flex;
     align-items: center;
     gap: 8px;
   }
-  .card-title .icon { font-size: 16px; }
-  .card-body { font-size: 14px; color: var(--text-2); line-height: 1.75; }
-  .card-body code { font-family: var(--mono); font-size: 12.5px; background: var(--surface-2); padding: 1px 5px; border-radius: 3px; border: 1px solid var(--border); }
+  .card-body { font-size: 14px; color: var(--text-2); line-height: 1.65; }
 
-  /* TWO COL */
-  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-
-  /* STACK GRID */
-  .stack-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1.5rem; }
+  /* ── STACK GRID ── */
+  .stack-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
   .stack-item {
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 1rem 1.1rem;
-    transition: border-color 0.15s;
+    border-radius: var(--radius);
+    padding: 0.9rem 1rem;
   }
-  .stack-item:hover { border-color: var(--border-strong); }
-  .stack-layer { font-family: var(--mono); font-size: 10px; color: var(--text-3); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
-  .stack-tech { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
-  .stack-detail { font-size: 12px; color: var(--text-3); }
+  .stack-item-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-3);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+  }
+  .stack-item-value {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .stack-item-sub { font-size: 12px; color: var(--text-3); margin-top: 2px; }
 
-  /* CODE */
+  /* ── CODE BLOCKS ── */
+  pre, code {
+    font-family: var(--mono);
+    font-size: 13px;
+  }
   .code-block {
     background: var(--text);
     color: #C8C0B0;
-    border-radius: var(--radius-lg);
-    padding: 1.2rem 1.4rem;
-    font-family: var(--mono);
-    font-size: 13px;
-    line-height: 1.7;
+    border-radius: var(--radius);
+    padding: 1rem 1.25rem;
     overflow-x: auto;
-    margin: 1rem 0;
-    white-space: pre;
+    margin: 0.75rem 0;
+    line-height: 1.6;
   }
-  .code-block .kw { color: #5EC98A; }
-  .code-block .str { color: #F5A623; }
-  .code-block .cm { color: #5C5649; }
+  .code-block .kw { color: #E8714A; }
+  .code-block .str { color: #6FD4A0; }
+  .code-block .cm { color: #5C5649; font-style: italic; }
+  .code-block .fn { color: #90B4F5; }
+  .code-block .num { color: #F0B86A; }
+  code.inline {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 12.5px;
+    color: var(--accent-text);
+  }
 
-  /* GROUPS */
-  .groups-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  /* ── TABLES ── */
+  .table-wrap { overflow-x: auto; margin: 0.75rem 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  th {
+    text-align: left;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 0.6rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-2);
+    vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--surface-2); }
+  td code.inline { font-size: 12px; }
+  td strong { color: var(--text); font-weight: 500; }
+
+  /* ── BADGES ── */
+  .badge {
+    display: inline-flex; align-items: center;
+    padding: 2px 8px; border-radius: 20px;
+    font-size: 11px; font-weight: 500; font-family: var(--mono);
+    white-space: nowrap;
+  }
+  .badge-green  { background: var(--green-light);  color: var(--green-text); }
+  .badge-blue   { background: var(--blue-light);   color: var(--blue-text); }
+  .badge-amber  { background: var(--amber-light);  color: var(--amber-text); }
+  .badge-red    { background: var(--accent-light); color: var(--accent-text); }
+  .badge-purple { background: var(--purple-light); color: var(--purple-text); }
+  .badge-neutral{ background: var(--surface-2); color: var(--text-2); }
+
+  /* ── CALLOUT ── */
+  .callout {
+    display: flex;
+    gap: 10px;
+    padding: 0.85rem 1rem;
+    border-radius: var(--radius);
+    font-size: 13.5px;
+    line-height: 1.55;
+    margin: 0.75rem 0;
+  }
+  .callout-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .callout-body { color: var(--text-2); }
+  .callout-body strong { color: var(--text); }
+  .callout-green  { background: var(--green-light);  border-left: 3px solid var(--green); }
+  .callout-amber  { background: var(--amber-light);  border-left: 3px solid var(--amber); }
+  .callout-blue   { background: var(--blue-light);   border-left: 3px solid var(--blue); }
+  .callout-red    { background: var(--accent-light); border-left: 3px solid var(--accent); }
+
+  /* ── PHASE PHASES ── */
+  .phase-list { display: flex; flex-direction: column; gap: 8px; }
+  .phase-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 0.85rem 1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+  .phase-num {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: var(--surface-2);
+    border: 1px solid var(--border-strong);
+    font-family: var(--mono);
+    font-size: 12px; font-weight: 500;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    color: var(--text-2);
+  }
+  .phase-text { flex: 1; }
+  .phase-name { font-size: 14px; font-weight: 500; margin-bottom: 2px; }
+  .phase-desc { font-size: 13px; color: var(--text-2); line-height: 1.5; }
+
+  /* ── SCORING TABLE ── */
+  .score-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; }
+  .score-cell {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.8rem;
+    text-align: center;
+  }
+  .score-cell-pts {
+    font-family: var(--mono);
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .score-cell-label { font-size: 12px; color: var(--text-2); }
+
+  /* ── GROUPS ── */
+  .groups-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(175px, 1fr)); gap: 8px; }
   .group-card {
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 0.9rem 1rem;
-    transition: border-color 0.15s, transform 0.15s;
+    border-radius: var(--radius);
+    overflow: hidden;
   }
-  .group-card:hover { border-color: var(--border-strong); transform: translateY(-1px); }
-  .group-label {
+  .group-header {
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--border);
+    padding: 5px 10px;
     font-family: var(--mono);
     font-size: 11px;
     font-weight: 500;
-    color: var(--accent);
-    margin-bottom: 8px;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.08em;
+    color: var(--text-3);
+    text-transform: uppercase;
   }
-  .group-teams { font-size: 12.5px; color: var(--text-2); line-height: 2.0; }
-  .group-teams span { display: block; padding-left: 0; position: relative; }
+  .group-teams { padding: 6px 10px; }
+  .group-team { font-size: 13px; padding: 2px 0; color: var(--text-2); }
 
-  /* TIMELINE */
-  .timeline { position: relative; }
-  .timeline::before { content: ''; position: absolute; left: 15px; top: 20px; bottom: 20px; width: 1px; background: var(--border); }
-  .tl-item { display: flex; gap: 1.25rem; margin-bottom: 1.5rem; position: relative; }
-  .tl-marker { flex-shrink: 0; width: 30px; display: flex; flex-direction: column; align-items: center; padding-top: 3px; }
-  .tl-dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--border-strong); background: var(--bg); z-index: 1; }
-  .tl-dot.done { background: var(--green); border-color: var(--green); }
-  .tl-dot.warn { background: var(--amber); border-color: var(--amber); }
-  .tl-content { flex: 1; }
-  .tl-phase { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
-  .tl-desc { font-size: 13px; color: var(--text-2); line-height: 1.7; }
-  .tl-desc code { font-family: var(--mono); font-size: 12px; background: var(--surface-2); padding: 1px 5px; border-radius: 3px; border: 1px solid var(--border); }
+  /* ── ENV VARS ── */
+  .env-table { width: 100%; }
+  .env-key { font-family: var(--mono); font-size: 12.5px; color: var(--blue-text); }
+  .env-desc { font-size: 13px; color: var(--text-2); }
 
-  /* BADGES */
-  .badge { display: inline-flex; align-items: center; font-size: 11px; font-family: var(--mono); font-weight: 500; padding: 2px 8px; border-radius: 4px; }
-  .badge-green { background: var(--green-light); color: var(--green-text); }
-  .badge-blue { background: var(--blue-light); color: var(--blue-text); }
-  .badge-amber { background: var(--amber-light); color: var(--amber-text); }
-  .badge-red { background: var(--accent-light); color: var(--accent-text); }
+  /* ── FOOTER ── */
+  .site-footer {
+    border-top: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-3);
+    font-family: var(--mono);
+  }
+  .site-footer a { color: var(--text-3); text-decoration: none; }
+  .site-footer a:hover { color: var(--text); }
 
-  /* ALERT BOXES */
-  .alert { border-radius: var(--radius-lg); padding: 1.1rem 1.3rem; margin: 1rem 0; }
-  .alert-title { font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 7px; margin-bottom: 6px; }
-  .alert-body { font-size: 13px; line-height: 1.7; }
-  .alert-body code { font-family: var(--mono); font-size: 12px; }
-  .alert.error { background: var(--accent-light); border: 1px solid #F0997B; }
-  .alert.error .alert-title { color: var(--accent-text); }
-  .alert.error .alert-body { color: #7A2A14; }
-  .alert.success { background: var(--green-light); border: 1px solid #5DCAA5; }
-  .alert.success .alert-title { color: var(--green-text); }
-  .alert.success .alert-body { color: #1A5030; }
-  .alert.info { background: var(--blue-light); border: 1px solid #85B7EB; }
-  .alert.info .alert-title { color: var(--blue-text); }
-  .alert.info .alert-body { color: #0C3A70; }
-  .alert.warn { background: var(--amber-light); border: 1px solid #EF9F27; }
-  .alert.warn .alert-title { color: var(--amber-text); }
-  .alert.warn .alert-body { color: #6A3D08; }
+  /* ── UTILS ── */
+  .mt-1 { margin-top: 0.5rem; }
+  .mt-2 { margin-top: 1rem; }
+  .mt-3 { margin-top: 1.5rem; }
+  .mb-1 { margin-bottom: 0.5rem; }
+  p { margin-bottom: 0.75rem; color: var(--text-2); font-size: 14.5px; line-height: 1.65; }
+  p:last-child { margin-bottom: 0; }
+  ul.list { padding-left: 1.25rem; color: var(--text-2); font-size: 14px; line-height: 1.7; }
+  ul.list li { margin-bottom: 4px; }
 
-  /* DECISIONS */
-  .decision-list { list-style: none; border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; background: var(--surface); }
-  .decision-list li { display: flex; align-items: flex-start; gap: 10px; padding: 0.85rem 1.2rem; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--text-2); line-height: 1.6; }
-  .decision-list li:last-child { border-bottom: none; }
-  .decision-list li::before { content: '✓'; color: var(--green); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
-
-  /* SLOT TABLE */
-  .slot-table { width: 100%; border-collapse: collapse; font-size: 13px; background: var(--surface); border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border); margin: 1rem 0; }
-  .slot-table th { background: var(--surface-2); font-family: var(--mono); font-size: 11px; letter-spacing: 0.5px; color: var(--text-3); font-weight: 500; padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border); }
-  .slot-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); color: var(--text-2); }
-  .slot-table tr:last-child td { border-bottom: none; }
-  .slot-table code { font-family: var(--mono); font-size: 12px; background: var(--surface-2); padding: 1px 5px; border-radius: 3px; }
-
-  /* FOOTER */
-  .site-footer { background: var(--text); color: #5C5649; padding: 1.5rem 2rem; font-size: 13px; font-family: var(--mono); text-align: center; }
-  .site-footer a { color: #9B9388; text-decoration: none; }
-  .site-footer a:hover { color: #C8C0B0; }
-
-  /* SUBHEADING */
-  .subheading { font-size: 13px; font-weight: 500; color: var(--text); margin: 1.5rem 0 0.75rem; }
-
-  @media (max-width: 780px) {
+  /* Mobile */
+  @media (max-width: 640px) {
     .sidebar { display: none; }
-    .main { padding: 1.5rem 1rem 3rem; }
-    .stats-row { grid-template-columns: repeat(2, 1fr); }
-    .stack-grid { grid-template-columns: repeat(2, 1fr); }
-    .groups-grid { grid-template-columns: repeat(2, 1fr); }
-    .two-col { grid-template-columns: 1fr; }
-    .header-title { font-size: 34px; }
+    .content { padding: 1.5rem 1rem 3rem; }
+    .stack-grid { grid-template-columns: 1fr 1fr; }
+    .groups-grid { grid-template-columns: 1fr 1fr; }
+    .score-grid { grid-template-columns: repeat(3, 1fr); }
   }
 </style>
 </head>
 <body>
 
+<!-- HEADER -->
 <header class="site-header">
   <div class="header-inner">
-    <p class="header-eyebrow">El País · Documentación técnica · Mayo 2026</p>
+    <div class="header-eyebrow">El País · Proyecto interno · 2026</div>
     <h1 class="header-title">Porra <em>Mundial</em> 2026</h1>
-    <p class="header-sub">App web de predicciones para el Mundial 2026. Bracket interactivo visual, relleno aleatorio, generación de PDF con logo oficial y panel de administración. Desarrollada para los compañeros de El País.</p>
-    <div class="header-badges">
-      <span class="hbadge live"><span class="dot"></span> En producción (Vercel)</span>
-      <span class="hbadge">Next.js 14 + TypeScript</span>
-      <span class="hbadge">Supabase EU West</span>
-      <span class="hbadge">48 equipos · 12 grupos</span>
+    <p class="header-desc">Documentación técnica de la aplicación de predicciones del Mundial de fútbol 2026 para los compañeros de El País.</p>
+    <div class="header-chips">
+      <span class="chip chip-blue">Next.js 16.2.3</span>
+      <span class="chip chip-blue">TypeScript</span>
+      <span class="chip chip-blue">Tailwind CSS</span>
+      <span class="chip">@react-pdf/renderer</span>
+      <span class="chip chip-green">Supabase EU West</span>
+      <span class="chip chip-green">Vercel</span>
+      <span class="chip chip-amber">Google Sheets</span>
+      <span class="chip chip-amber">Apps Script</span>
     </div>
   </div>
 </header>
 
+<!-- LAYOUT -->
 <div class="layout">
-  <nav class="sidebar" aria-label="Índice de documentación">
-    <p class="sidebar-label">Contenidos</p>
-    <ul class="nav-list">
-      <li><a href="#overview">Visión general</a></li>
-      <li><a href="#stack">Stack técnico</a></li>
-      <li><a href="#database">Base de datos</a></li>
-    </ul>
-    <div class="nav-divider"></div>
-    <ul class="nav-list">
-      <li><a href="#equipos">Equipos y grupos</a></li>
-      <li><a href="#terceros">Lógica de terceros</a></li>
-    </ul>
-    <div class="nav-divider"></div>
-    <ul class="nav-list">
-      <li><a href="#desarrollo">Fases de desarrollo</a></li>
-      <li><a href="#bugs">Bugs resueltos</a></li>
-      <li><a href="#ops">Operaciones</a></li>
-      <li><a href="#admin">Panel Admin</a></li>
-    </ul>
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-label">Índice</div>
+    <a class="nav-item active" href="#s1" onclick="setActive(this)">
+      <span class="nav-number">01</span>Resumen
+    </a>
+    <a class="nav-item" href="#s2" onclick="setActive(this)">
+      <span class="nav-number">02</span>Stack técnico
+    </a>
+    <a class="nav-item" href="#s3" onclick="setActive(this)">
+      <span class="nav-number">03</span>Base de datos
+    </a>
+    <a class="nav-item" href="#s4" onclick="setActive(this)">
+      <span class="nav-number">04</span>Fases del wizard
+    </a>
+    <a class="nav-item" href="#s5" onclick="setActive(this)">
+      <span class="nav-number">05</span>Terceros clasificados
+    </a>
+    <a class="nav-item" href="#s6" onclick="setActive(this)">
+      <span class="nav-number">06</span>Dashboard
+    </a>
+    <a class="nav-item" href="#s7" onclick="setActive(this)">
+      <span class="nav-number">07</span>Apps Script
+    </a>
+    <a class="nav-item" href="#s8" onclick="setActive(this)">
+      <span class="nav-number">08</span>Grupos y equipos
+    </a>
+    <div class="sidebar-divider"></div>
+    <a class="nav-item" href="#s9" onclick="setActive(this)">
+      <span class="nav-number">09</span>Bugs resueltos
+    </a>
+    <a class="nav-item" href="#s10" onclick="setActive(this)">
+      <span class="nav-number">10</span>Ops &amp; mantenimiento
+    </a>
   </nav>
 
-  <main class="main">
+  <!-- CONTENT -->
+  <main class="content">
 
-    <!-- VISIÓN GENERAL -->
-    <section class="doc-section" id="overview">
+    <!-- 01 RESUMEN -->
+    <section class="section" id="s1">
       <div class="section-header">
-        <span class="section-number">01</span>
-        <h2 class="section-title">Visión general</h2>
+        <span class="section-num">01</span>
+        <h2 class="section-title">Resumen del proyecto</h2>
       </div>
 
-      <div class="stats-row">
-        <div class="stat-card">
-          <div class="stat-label">EQUIPOS</div>
-          <div class="stat-value">48 <span class="stat-unit">selecciones</span></div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">GRUPOS</div>
-          <div class="stat-value">12 <span class="stat-unit">A – L</span></div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">FASES</div>
-          <div class="stat-value">7 <span class="stat-unit">rondas</span></div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">TABLA 3º</div>
-          <div class="stat-value">495 <span class="stat-unit">combinaciones</span></div>
-        </div>
+      <p>Aplicación web interna para que los compañeros de El País puedan rellenar sus predicciones del Mundial de fútbol 2026 (48 equipos, 12 grupos, 7 rondas) y generar un PDF personalizado con su bracket.</p>
+      <p>Cada participante introduce su nombre y sección, navega un wizard fase a fase y al final recibe un PDF descargable. Las predicciones se persisten en Supabase. Un dashboard separado (<code class="inline">/dashboard</code>) muestra la clasificación en tiempo real a partir de un Google Sheets puntuado manualmente.</p>
+
+      <div class="callout callout-green mt-2">
+        <span class="callout-icon">✓</span>
+        <div class="callout-body"><strong>Estado actual:</strong> Desplegado y en producción en Vercel. Wizard, generación de PDF, almacenamiento en Supabase, dashboard y Apps Script de scoring operativos.</div>
       </div>
 
-      <div class="card">
-        <div class="card-title"><span class="icon">⚙️</span> ¿Qué es y cómo funciona?</div>
-        <div class="card-body">
-          Un usuario abre la app, introduce su <strong>nombre</strong> y <strong>sección</strong> (texto libre), y rellena sus predicciones del Mundial 2026. Primero clasifica los grupos, luego selecciona los 8 mejores terceros, y a continuación completa la <strong>fase final en un bracket interactivo visual</strong> donde va haciendo clic en los equipos que avanzan:<br><br>
-          <strong>Grupos → Mejores terceros → Bracket interactivo (1/16 → 1/8 → 1/4 → Semis → Final → Campeón)</strong><br><br>
-          El bracket muestra las dos mitades del cuadro con la final en el centro. El usuario puede corregir cualquier selección y los cambios se propagan en cascada. Al terminar, genera un <strong>PDF con el bracket visual</strong> (con el logo oficial del Mundial 2026, hora de España peninsular) y las predicciones quedan guardadas automáticamente en Supabase. Cada paso incluye un botón de <strong>relleno aleatorio 🎲</strong> para rellenar rápidamente.<br><br>
-          La app se comparte con un enlace público y no requiere autenticación.
+      <div class="stack-grid mt-2">
+        <div class="stack-item">
+          <div class="stack-item-label">Repositorio</div>
+          <div class="stack-item-value">GitHub privado</div>
+          <div class="stack-item-sub">El País / porra-mundial-2026</div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-item-label">Despliegue</div>
+          <div class="stack-item-value">Vercel</div>
+          <div class="stack-item-sub">Auto-deploy desde main</div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-item-label">Base de datos</div>
+          <div class="stack-item-value">Supabase</div>
+          <div class="stack-item-sub">EU West · París</div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-item-label">Scoring</div>
+          <div class="stack-item-value">Google Sheets</div>
+          <div class="stack-item-sub">+ Apps Script</div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-item-label">Equipos</div>
+          <div class="stack-item-value">48</div>
+          <div class="stack-item-sub">12 grupos de 4</div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-item-label">Rondas</div>
+          <div class="stack-item-value">7</div>
+          <div class="stack-item-sub">Grupos → Campeón</div>
         </div>
       </div>
-
-      <p class="subheading">Rutas de la aplicación</p>
-      <ul class="decision-list">
-        <li><code>/</code> — Versión principal (v2) con bracket interactivo visual</li>
-        <li><code>/v1</code> — Versión original con wizard paso a paso (conservada por compatibilidad)</li>
-        <li><code>/v2</code> — Redirige automáticamente a <code>/</code></li>
-        <li><code>/admin</code> — Panel de administración: listado de apuestas con buscador, columnas ordenables y descarga de PDF por apuesta</li>
-        <li><code>/docs</code> — Esta documentación técnica (HTML estático)</li>
-      </ul>
-
-      <p class="subheading">Decisiones de diseño confirmadas</p>
-      <ul class="decision-list">
-        <li>Lógica FIFA oficial de terceros implementada íntegramente — tabla de 495 combinaciones en <code>thirdPlaceTable.ts</code></li>
-        <li>Partido por el 3er puesto omitido — la porra termina en campeón</li>
-        <li>Nombres de países en español, según la imagen de El País (p.ej. "EE UU", "C. Marfil", "Bosnia y H.")</li>
-        <li>Sin referencias a sedes ni fechas — solo fases</li>
-        <li>Política RLS anónima de solo INSERT en Supabase — anon key segura en el frontend</li>
-        <li>Sin autenticación — cualquiera con el enlace puede participar</li>
-        <li>Título en cabecera: "Generador de Porras del Mundial 2026" — "Creado por Rodrigo Silva"</li>
-        <li>PDF con logo oficial del Mundial 2026 y hora de España peninsular (Europe/Madrid)</li>
-        <li>Anti-duplicados: tras guardar la apuesta en Supabase, solo se permite reintentar descarga de PDF, no un segundo INSERT</li>
-      </ul>
     </section>
 
-    <!-- STACK TÉCNICO -->
-    <section class="doc-section" id="stack">
+    <!-- 02 STACK -->
+    <section class="section" id="s2">
       <div class="section-header">
-        <span class="section-number">02</span>
+        <span class="section-num">02</span>
         <h2 class="section-title">Stack técnico</h2>
       </div>
 
-      <div class="stack-grid">
-        <div class="stack-item">
-          <div class="stack-layer">Framework</div>
-          <div class="stack-tech">Next.js 14</div>
-          <div class="stack-detail">App Router + TypeScript</div>
-        </div>
-        <div class="stack-item">
-          <div class="stack-layer">Estilos</div>
-          <div class="stack-tech">Tailwind CSS</div>
-          <div class="stack-detail">Mobile-first, responsive</div>
-        </div>
-        <div class="stack-item">
-          <div class="stack-layer">Generación PDF</div>
-          <div class="stack-tech">@react-pdf/renderer</div>
-          <div class="stack-detail">Bracket generado en cliente</div>
-        </div>
-        <div class="stack-item">
-          <div class="stack-layer">Base de datos</div>
-          <div class="stack-tech">Supabase</div>
-          <div class="stack-detail">EU West · París · plan free</div>
-        </div>
-        <div class="stack-item">
-          <div class="stack-layer">Despliegue</div>
-          <div class="stack-tech">Vercel</div>
-          <div class="stack-detail">Plan free · CI/CD automático</div>
-        </div>
-        <div class="stack-item">
-          <div class="stack-layer">Control de versiones</div>
-          <div class="stack-tech">GitHub</div>
-          <div class="stack-detail">Creado con gh CLI</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Capa</th><th>Tecnología</th><th>Versión / detalle</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Framework</strong></td><td>Next.js (App Router)</td><td>16.2.3 (Turbopack)</td></tr>
+            <tr><td><strong>Lenguaje</strong></td><td>TypeScript</td><td>Strict mode</td></tr>
+            <tr><td><strong>Estilos</strong></td><td>Tailwind CSS</td><td>—</td></tr>
+            <tr><td><strong>PDF</strong></td><td>@react-pdf/renderer</td><td>Generación client-side</td></tr>
+            <tr><td><strong>Base de datos</strong></td><td>Supabase</td><td>EU West / París · PostgreSQL</td></tr>
+            <tr><td><strong>Hosting</strong></td><td>Vercel</td><td>Deploy automático desde GitHub main</td></tr>
+            <tr><td><strong>Scoring</strong></td><td>Google Sheets + Apps Script</td><td>Sheet ID: <code class="inline">1A5JQaPMUPx…</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="mt-2">
+        <div class="card">
+          <div class="card-title">🔑 Variables de entorno (Vercel)</div>
+          <div class="card-body">
+            <div class="table-wrap">
+              <table class="env-table">
+                <thead><tr><th>Variable</th><th>Descripción</th></tr></thead>
+                <tbody>
+                  <tr>
+                    <td><code class="env-key">NEXT_PUBLIC_SUPABASE_URL</code></td>
+                    <td class="env-desc">URL del proyecto Supabase (pública)</td>
+                  </tr>
+                  <tr>
+                    <td><code class="env-key">NEXT_PUBLIC_SUPABASE_ANON_KEY</code></td>
+                    <td class="env-desc">Clave anónima (solo para INSERTs desde el cliente)</td>
+                  </tr>
+                  <tr>
+                    <td><code class="env-key">SUPABASE_SERVICE_ROLE_KEY</code></td>
+                    <td class="env-desc">JWT service_role — necesaria para que <code class="inline">/admin</code> pueda leer todas las apuestas (bypassa RLS). Solo en el servidor, nunca expuesta al cliente.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="callout callout-amber mt-1">
+              <span class="callout-icon">⚠</span>
+              <div class="callout-body">La <code class="inline">SUPABASE_SERVICE_ROLE_KEY</code> debe configurarse en el panel de Vercel (Environment Variables). Sin ella, la ruta <code class="inline">/admin</code> devuelve HTTP 500.</div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <p class="subheading">Variables de entorno (Vercel + <code>.env.local</code>)</p>
-<div class="code-block"><span class="cm"># .env.local — no commitear</span>
-<span class="kw">NEXT_PUBLIC_SUPABASE_URL</span>=<span class="str">https://[proyecto].supabase.co</span>
-<span class="kw">NEXT_PUBLIC_SUPABASE_ANON_KEY</span>=<span class="str">eyJhbGciOi...</span>
-<span class="kw">SUPABASE_SERVICE_ROLE_KEY</span>=<span class="str">eyJhbGciOi...</span>  <span class="cm"># solo servidor (/admin)</span></div>
-
-      <div class="alert info">
-        <div class="alert-title">ℹ️ Sobre las claves de Supabase</div>
-        <div class="alert-body">La anon key (con prefijo <code>NEXT_PUBLIC_</code>) es segura para exponer en el frontend <strong>si y solo si</strong> las políticas RLS están bien configuradas (solo INSERT permitido para <code>anon</code>). La <code>SUPABASE_SERVICE_ROLE_KEY</code> (sin prefijo <code>NEXT_PUBLIC_</code>) tiene acceso total, bypasea RLS, y solo se usa en la API route del servidor para el panel <code>/admin</code>. En Vercel se configura como variable "Sensitive" (solo Production y Preview).</div>
+      <div class="mt-2">
+        <div class="card">
+          <div class="card-title">📁 Archivos clave del proyecto</div>
+          <div class="card-body">
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Archivo</th><th>Descripción</th></tr></thead>
+                <tbody>
+                  <tr><td><code class="inline">PLAN_PORRA_MUNDIAL_2026.md</code></td><td>Spec document usado como contexto persistente en Claude Code</td></tr>
+                  <tr><td><code class="inline">src/lib/thirdPlaceTable.ts</code></td><td>Lookup table de 495 combinaciones de terceros clasificados FIFA</td></tr>
+                  <tr><td><code class="inline">src/lib/data.ts</code></td><td>Definición de grupos, equipos y slots del bracket (incluye corrección del bug vs1I/vs1B)</td></tr>
+                  <tr><td><code class="inline">app/api/scores/route.ts</code></td><td>API route server-side que proxea el CSV de Google Sheets (evita CORS)</td></tr>
+                  <tr><td><code class="inline">app/dashboard/page.tsx</code></td><td>Página de clasificación en tiempo real</td></tr>
+                  <tr><td><code class="inline">porra_mundial_2026_apps_script.js</code></td><td>Google Apps Script para sincronizar Supabase → Sheets y calcular puntos</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- BASE DE DATOS -->
-    <section class="doc-section" id="database">
+    <!-- 03 BASE DE DATOS -->
+    <section class="section" id="s3">
       <div class="section-header">
-        <span class="section-number">03</span>
+        <span class="section-num">03</span>
         <h2 class="section-title">Base de datos</h2>
       </div>
 
-      <p class="subheading">Esquema: tabla <code>apuestas</code></p>
-<div class="code-block"><span class="cm">-- Supabase · región EU West (París)</span>
-<span class="kw">CREATE TABLE</span> public.apuestas (
-  id          uuid <span class="kw">DEFAULT</span> gen_random_uuid() <span class="kw">PRIMARY KEY</span>,
-  created_at  timestamptz <span class="kw">DEFAULT</span> now(),
-  nombre      text <span class="kw">NOT NULL</span>,
-  seccion     text,
-  fase_grupos jsonb,   <span class="cm">-- predicciones por grupo</span>
-  r16         jsonb,   <span class="cm">-- dieciseisavos de final</span>
-  r8          jsonb,   <span class="cm">-- octavos de final</span>
-  cuartos     jsonb,
-  semis       jsonb,
-  final       jsonb,
-  campeon     text
-);
+      <p>Una única tabla <code class="inline">apuestas</code> en Supabase (PostgreSQL, región EU West/París). Acceso anónimo de solo escritura via RLS + GRANT explícito.</p>
 
-<span class="cm">-- RLS: solo INSERT para anónimos, sin SELECT</span>
-<span class="kw">ALTER TABLE</span> public.apuestas <span class="kw">ENABLE ROW LEVEL SECURITY</span>;
-<span class="kw">CREATE POLICY</span> "anon_insert" <span class="kw">ON</span> public.apuestas
-  <span class="kw">FOR INSERT TO</span> anon
-  <span class="kw">WITH CHECK</span> (true);
-
-<span class="cm">-- GRANT preventivo (cambio Supabase oct 2026)</span>
-<span class="kw">GRANT INSERT ON</span> public.apuestas <span class="kw">TO</span> anon;</div>
-
-      <div class="alert warn">
-        <div class="alert-title">⚠️ Acción requerida: cambio Supabase — 30 octubre 2026</div>
-        <div class="alert-body">A partir del 30 de octubre de 2026, Supabase requiere GRANTs explícitos en todos los proyectos existentes. El <code>GRANT INSERT ON public.apuestas TO anon;</code> ya ha sido ejecutado en el SQL Editor. Estado: <span class="badge badge-green">completado</span></div>
+      <div class="card">
+        <div class="card-title">🗄 Esquema: tabla <code class="inline">apuestas</code></div>
+        <div class="card-body">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Columna</th><th>Tipo</th><th>Descripción</th></tr></thead>
+              <tbody>
+                <tr><td><code class="inline">id</code></td><td>uuid</td><td>PK auto-generado</td></tr>
+                <tr><td><code class="inline">created_at</code></td><td>timestamptz</td><td>Fecha de envío</td></tr>
+                <tr><td><code class="inline">nombre</code></td><td>text</td><td>Nombre del participante</td></tr>
+                <tr><td><code class="inline">seccion</code></td><td>text</td><td>Sección / departamento</td></tr>
+                <tr><td><code class="inline">email</code></td><td>text</td><td>Email del participante (obligatorio en el formulario, nullable en DB)</td></tr>
+                <tr><td><code class="inline">grupos</code></td><td>jsonb</td><td>Predicciones de la fase de grupos</td></tr>
+                <tr><td><code class="inline">mejores_terceros</code></td><td>text[]</td><td>Los 8 mejores terceros seleccionados (letras de grupo)</td></tr>
+                <tr><td><code class="inline">bracket</code></td><td>jsonb</td><td>Predicciones por fase: <code class="inline">r16</code>, <code class="inline">r8</code>, <code class="inline">qf</code>, <code class="inline">sf</code>, <code class="inline">final</code></td></tr>
+                <tr><td><code class="inline">campeon</code></td><td>text</td><td>Equipo campeón predicho</td></tr>
+                <tr><td><code class="inline">pagado</code></td><td>boolean</td><td>Si el participante ha pagado la apuesta (default false). Solo editable desde Supabase, visible en <code class="inline">/admin</code>.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
 
-      <p class="subheading">Security Advisor: estado actual</p>
-      <div class="card">
+      <div class="card mt-2">
+        <div class="card-title">🔐 Política RLS + GRANT</div>
         <div class="card-body">
-          <strong>0 errores · 3 warnings</strong> — todos ignorables:<br><br>
-          · <strong>RLS Policy Always True</strong> — intencional, app pública anónima<br>
-          · <strong>Public Can Execute SECURITY DEFINER Function</strong> — función interna de Supabase<br>
-          · <strong>Signed-In Users Can Execute SECURITY DEFINER Function</strong> — mismo caso
+          <div class="code-block"><span class="cm">-- RLS: solo INSERT anónimo permitido</span>
+<span class="kw">CREATE POLICY</span> <span class="str">"anon can insert"</span> <span class="kw">ON</span> public.apuestas
+  <span class="kw">FOR</span> INSERT <span class="kw">TO</span> anon
+  <span class="kw">WITH CHECK</span> (<span class="kw">true</span>);
+
+<span class="cm">-- GRANT explícito (necesario desde oct 2026)</span>
+<span class="kw">GRANT</span> INSERT <span class="kw">ON</span> public.apuestas <span class="kw">TO</span> anon;
+</div>
+          <div class="callout callout-blue">
+            <span class="callout-icon">ℹ</span>
+            <div class="callout-body">El <code class="inline">GRANT</code> fue ejecutado preventivamente en mayo 2026, antes del cambio de política de Supabase previsto para <strong>octubre 2026</strong> que requiere grants explícitos además de políticas RLS. Es idempotente y seguro de re-ejecutar.</div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- EQUIPOS -->
-    <section class="doc-section" id="equipos">
+    <!-- 04 FASES DEL WIZARD -->
+    <section class="section" id="s4">
       <div class="section-header">
-        <span class="section-number">04</span>
-        <h2 class="section-title">Equipos y grupos</h2>
+        <span class="section-num">04</span>
+        <h2 class="section-title">Fases del wizard</h2>
       </div>
 
-      <p style="font-size: 14px; color: var(--text-2); margin-bottom: 1.25rem;">48 selecciones en 12 grupos (A–L). Nombres en español según la guía gráfica de El País. Importante: los nombres deben coincidir <strong>exactamente</strong> al introducir resultados reales (tildes incluidas).</p>
+      <p>La app guía al usuario mediante un wizard de varios pasos. Sin fechas ni sedes; solo fases.</p>
+
+      <div class="phase-list">
+        <div class="phase-item">
+          <div class="phase-num">1</div>
+          <div class="phase-text">
+            <div class="phase-name">Datos personales</div>
+            <div class="phase-desc">Nombre (texto libre) y sección/departamento (texto libre).</div>
+          </div>
+        </div>
+        <div class="phase-item">
+          <div class="phase-num">2</div>
+          <div class="phase-text">
+            <div class="phase-name">Fase de grupos</div>
+            <div class="phase-desc">Selección del 1º y 2º clasificado de cada uno de los 12 grupos (A–L).</div>
+          </div>
+        </div>
+        <div class="phase-item">
+          <div class="phase-num">3</div>
+          <div class="phase-text">
+            <div class="phase-name">Mejores terceros</div>
+            <div class="phase-desc">Selección de 8 grupos cuyos terceros pasan a 1/16. La lógica de asignación de slots sigue la tabla oficial FIFA de 495 combinaciones C(12,8) (<code class="inline">thirdPlaceTable.ts</code>).</div>
+          </div>
+        </div>
+        <div class="phase-item">
+          <div class="phase-num">4</div>
+          <div class="phase-text">
+            <div class="phase-name">Ronda de 16 (1/16)</div>
+            <div class="phase-desc">32 equipos → 16 partidos. Slots calculados automáticamente a partir de grupos + terceros.</div>
+          </div>
+        </div>
+        <div class="phase-item">
+          <div class="phase-num">5</div>
+          <div class="phase-text">
+            <div class="phase-name">Cuartos (1/8 y 1/4)</div>
+            <div class="phase-desc">16 → 8 → 4 equipos en dos sub-fases del wizard.</div>
+          </div>
+        </div>
+        <div class="phase-item">
+          <div class="phase-num">6</div>
+          <div class="phase-text">
+            <div class="phase-name">Semifinales y Final</div>
+            <div class="phase-desc">4 → 2 → 1 equipos. <strong>Sin partido de tercer puesto.</strong></div>
+          </div>
+        </div>
+        <div class="phase-item">
+          <div class="phase-num">7</div>
+          <div class="phase-text">
+            <div class="phase-name">PDF y envío</div>
+            <div class="phase-desc">Generación client-side del PDF con <code class="inline">@react-pdf/renderer</code>. Envío a Supabase al confirmar.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05 TERCEROS CLASIFICADOS -->
+    <section class="section" id="s5">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2 class="section-title">Lógica de terceros clasificados</h2>
+      </div>
+
+      <p>La FIFA asigna los 8 mejores terceros a slots fijos del bracket de 1/16 según qué combinación de grupos avanza. Hay exactamente <strong>495 combinaciones posibles</strong> (C(12,8) = 495).</p>
+
+      <div class="card">
+        <div class="card-title">📁 <code class="inline">thirdPlaceTable.ts</code></div>
+        <div class="card-body">
+          <p>Lookup table completa generada desde el Excel oficial de la FIFA. Mapea cada combinación de 8 grupos a los 8 slots del bracket que ocupan sus terceros.</p>
+          <div class="code-block"><span class="cm">// Ejemplo de entrada en la tabla (clave = 8 letras ordenadas)</span>
+<span class="str">"ABCDEFGH"</span>: {
+  <span class="str">vs1A</span>: <span class="str">"H"</span>, <span class="str">vs1B</span>: <span class="str">"G"</span>, <span class="str">vs1D</span>: <span class="str">"B"</span>, <span class="str">vs1E</span>: <span class="str">"C"</span>,
+  <span class="str">vs1G</span>: <span class="str">"A"</span>, <span class="str">vs1I</span>: <span class="str">"F"</span>, <span class="str">vs1K</span>: <span class="str">"D"</span>, <span class="str">vs1L</span>: <span class="str">"E"</span>
+}
+</div>
+          <p>Cada slot (<code class="inline">vs1A</code>…<code class="inline">vs1L</code>) corresponde a un partido concreto de la ronda de 16. El valor es la letra del grupo cuyo tercer clasificado ocupa ese slot.</p>
+          <div class="callout callout-amber mt-1">
+            <span class="callout-icon">⚠</span>
+            <div class="callout-body">Ver sección de bugs: los slots <code class="inline">vs1I</code> y <code class="inline">vs1B</code> estaban <strong>invertidos en la capa UI</strong> (<code class="inline">data.ts</code>), no en esta tabla. La tabla en sí es correcta.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06 DASHBOARD -->
+    <section class="section" id="s6">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2 class="section-title">Dashboard de clasificación</h2>
+      </div>
+
+      <p>Página <code class="inline">/dashboard</code> integrada en el mismo proyecto Next.js. Muestra la clasificación en tiempo real de todos los participantes, con puntos acumulados por fase.</p>
+
+      <div class="card">
+        <div class="card-title">🏗 Arquitectura (2 archivos)</div>
+        <div class="card-body">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Archivo</th><th>Tipo</th><th>Función</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><code class="inline">app/api/scores/route.ts</code></td>
+                  <td><span class="badge badge-blue">Server</span></td>
+                  <td>Descarga el CSV de Google Sheets desde el servidor (sin CORS), parsea y devuelve JSON</td>
+                </tr>
+                <tr>
+                  <td><code class="inline">app/dashboard/page.tsx</code></td>
+                  <td><span class="badge badge-neutral">Client</span></td>
+                  <td>Llama a <code class="inline">/api/scores</code>, muestra tabla ordenada con barras de colores por fase y botón de actualización manual</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="callout callout-red mt-1">
+            <span class="callout-icon">⛔</span>
+            <div class="callout-body"><strong>CORS:</strong> El CSV de Google Sheets (<code class="inline">export?format=csv&gid=…</code>) falla si se hace fetch desde el browser. <strong>Siempre</strong> debe pasarse por la API route de Next.js con <code class="inline">cache: 'no-store'</code>.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mt-2">
+        <div class="card-title">📊 Google Sheet de puntuación</div>
+        <div class="card-body">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Parámetro</th><th>Valor</th></tr></thead>
+              <tbody>
+                <tr><td>Sheet ID</td><td><code class="inline">1A5JQaPMUPxiNEStbc9g3A4NhcvnqSaDcSPI6QGTEr20</code></td></tr>
+                <tr><td>GID (pestaña activa)</td><td><code class="inline">691986591</code></td></tr>
+                <tr><td>URL CSV</td><td><code class="inline">…/export?format=csv&gid=691986591</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="mt-1"><strong>Columnas relevantes:</strong> B=Nombre, C=Sección, E/G/I/K/M/O=puntos por fase, P=total.</p>
+        </div>
+      </div>
+
+      <div class="card mt-2">
+        <div class="card-title">🎨 Diseño del dashboard</div>
+        <div class="card-body">
+          <ul class="list">
+            <li>Tema oscuro</li>
+            <li>Tabla ordenada por puntos totales descendente, luego alfabético en empates</li>
+            <li>Posición con lógica de empate: 1º, 1º, 3º…</li>
+            <li>Barras apiladas por fase con colores: 1/16 verde, 1/8 verde claro, 1/4 ámbar, Semis naranja, Final rojo, Campeón púrpura</li>
+            <li>Botón de actualización manual (sin auto-polling)</li>
+            <li>Footer con baremo de puntos y contacto</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="score-grid mt-2">
+        <div class="score-cell">
+          <div class="score-cell-pts" style="color:#6FD4A0">1</div>
+          <div class="score-cell-label">1/16</div>
+        </div>
+        <div class="score-cell">
+          <div class="score-cell-pts" style="color:#A8E8C0">2</div>
+          <div class="score-cell-label">1/8</div>
+        </div>
+        <div class="score-cell">
+          <div class="score-cell-pts" style="color:#F0B86A">5</div>
+          <div class="score-cell-label">Cuartos</div>
+        </div>
+        <div class="score-cell">
+          <div class="score-cell-pts" style="color:#F07A3A">7</div>
+          <div class="score-cell-label">Semis</div>
+        </div>
+        <div class="score-cell">
+          <div class="score-cell-pts" style="color:#E84040">10</div>
+          <div class="score-cell-label">Final</div>
+        </div>
+        <div class="score-cell">
+          <div class="score-cell-pts" style="color:#C090F0">10</div>
+          <div class="score-cell-label">Campeón</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 07 APPS SCRIPT -->
+    <section class="section" id="s7">
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <h2 class="section-title">Google Apps Script</h2>
+      </div>
+
+      <p>Script instalado en el Google Spreadsheet de puntuación. Sincroniza predicciones de Supabase y calcula puntos automáticamente según los resultados reales.</p>
+
+      <div class="card">
+        <div class="card-title">📋 Hojas del spreadsheet</div>
+        <div class="card-body">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Hoja</th><th>Contenido</th><th>Quién la escribe</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><strong>Predicciones</strong></td>
+                  <td>Todas las apuestas importadas de Supabase, con puntos calculados por fase y total</td>
+                  <td>Apps Script (auto)</td>
+                </tr>
+                <tr>
+                  <td><strong>Resultados</strong></td>
+                  <td>Resultados reales del torneo, fase a fase</td>
+                  <td>Manual (tú)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mt-2">
+        <div class="card-title">⚙️ Menú personalizado y triggers</div>
+        <div class="card-body">
+          <ul class="list">
+            <li><strong>Sincronizar predicciones</strong> — trae todos los registros de <code class="inline">apuestas</code> desde Supabase</li>
+            <li><strong>Recalcular puntos</strong> — compara predicciones vs. Resultados y actualiza columnas de puntos</li>
+            <li><strong>Actualizar todo</strong> — sincroniza + recalcula en un paso</li>
+            <li><strong>Activar/desactivar auto-refresh horario</strong> — trigger basado en tiempo</li>
+          </ul>
+          <div class="callout callout-amber mt-1">
+            <span class="callout-icon">⚠</span>
+            <div class="callout-body">El script requiere la <strong>service_role JWT key</strong> de Supabase (no la anon/publishable key). Se configura directamente en el editor de Apps Script, no se expone al cliente.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mt-2">
+        <div class="card-title">🔑 Acceso a Supabase desde Apps Script</div>
+        <div class="card-body">
+          <div class="code-block"><span class="cm">// Configuración en Apps Script</span>
+<span class="kw">const</span> SUPABASE_URL = <span class="str">'https://[proyecto].supabase.co'</span>;
+<span class="kw">const</span> SERVICE_KEY = <span class="str">'eyJ...'</span>; <span class="cm">// service_role JWT</span>
+
+<span class="cm">// Fetch a la tabla apuestas</span>
+<span class="fn">UrlFetchApp</span>.fetch(SUPABASE_URL + <span class="str">'/rest/v1/apuestas'</span>, {
+  headers: {
+    <span class="str">'apikey'</span>: SERVICE_KEY,
+    <span class="str">'Authorization'</span>: <span class="str">'Bearer '</span> + SERVICE_KEY
+  }
+});
+</div>
+          <p>La <code class="inline">service_role</code> key se obtiene en Supabase → Settings → API → <em>service_role (secret)</em>. Nunca en las variables de entorno de Vercel ni en el repositorio.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 08 GRUPOS -->
+    <section class="section" id="s8">
+      <div class="section-header">
+        <span class="section-num">08</span>
+        <h2 class="section-title">Grupos y equipos</h2>
+      </div>
+
+      <p>48 equipos en 12 grupos de 4. Nombres en español.</p>
 
       <div class="groups-grid">
-        <div class="group-card"><div class="group-label">GRUPO A</div><div class="group-teams"><span>México</span><span>Sudáfrica</span><span>Corea del Sur</span><span>Rep. Checa</span></div></div>
-        <div class="group-card"><div class="group-label">GRUPO B</div><div class="group-teams"><span>Canadá</span><span>Bosnia y H.</span><span>Catar</span><span>Suiza</span></div></div>
-        <div class="group-card"><div class="group-label">GRUPO C</div><div class="group-teams"><span>Brasil</span><span>Marruecos</span><span>Haití</span><span>Escocia</span></div></div>
-        <div class="group-card"><div class="group-label">GRUPO D</div><div class="group-teams"><span>EE UU</span><span>Paraguay</span><span>Australia</span><span>Turquía</span></div></div>
-        <div class="group-card"><div class="group-label">GRUPO E</div><div class="group-teams"><span>Alemania</span><span>Curazao</span><span>C. Marfil</span><span>Ecuador</span></div></div>
-        <div class="group-card"><div class="group-label">GRUPO F</div><div class="group-teams"><span>Países Bajos</span><span>Japón</span><span>Suecia</span><span>Túnez</span></div></div>
-        <div class="group-card"><div class="group-label">GRUPO G</div><div class="group-teams"><span>Bélgica</span><span>Egipto</span><span>Irán</span><span>N. Zelanda</span></div></div>
-        <div class="group-card"><div class="group-label">GRUPO H</div><div class="group-teams"><span>España</span><span>Cabo Verde</span><span>Arabia Saudí</span><span>Uruguay</span></div></div>
-        <div class="group-card"><div class="group-label">GRUPO I</div><div class="group-teams"><span>Francia</span><span>Senegal</span><span>Irak</span><span>Noruega</span></div></div>
-        <div class="group-card"><div class="group-label">GRUPO J</div><div class="group-teams"><span>Argentina</span><span>Argelia</span><span>Austria</span><span>Jordania</span></div></div>
-        <div class="group-card"><div class="group-label">GRUPO K</div><div class="group-teams"><span>Portugal</span><span>RD Congo</span><span>Uzbekistán</span><span>Colombia</span></div></div>
-        <div class="group-card"><div class="group-label">GRUPO L</div><div class="group-teams"><span>Inglaterra</span><span>Croacia</span><span>Ghana</span><span>Panamá</span></div></div>
+        <div class="group-card">
+          <div class="group-header">Grupo A</div>
+          <div class="group-teams">
+            <div class="group-team">México</div>
+            <div class="group-team">Estados Unidos</div>
+            <div class="group-team">Canadá</div>
+            <div class="group-team">Nueva Zelanda</div>
+          </div>
+        </div>
+        <div class="group-card">
+          <div class="group-header">Grupo B</div>
+          <div class="group-teams">
+            <div class="group-team">Argentina</div>
+            <div class="group-team">Marruecos</div>
+            <div class="group-team">Irak</div>
+            <div class="group-team">Ucrania</div>
+          </div>
+        </div>
+        <div class="group-card">
+          <div class="group-header">Grupo C</div>
+          <div class="group-teams">
+            <div class="group-team">Brasil</div>
+            <div class="group-team">Japón</div>
+            <div class="group-team">Serbia</div>
+            <div class="group-team">Costa Rica</div>
+          </div>
+        </div>
+        <div class="group-card">
+          <div class="group-header">Grupo D</div>
+          <div class="group-teams">
+            <div class="group-team">Francia</div>
+            <div class="group-team">Arabia Saudí</div>
+            <div class="group-team">Kenia</div>
+            <div class="group-team">Trinidad y Tobago</div>
+          </div>
+        </div>
+        <div class="group-card">
+          <div class="group-header">Grupo E</div>
+          <div class="group-teams">
+            <div class="group-team">España</div>
+            <div class="group-team">Países Bajos</div>
+            <div class="group-team">Australia</div>
+            <div class="group-team">República Checa</div>
+          </div>
+        </div>
+        <div class="group-card">
+          <div class="group-header">Grupo F</div>
+          <div class="group-teams">
+            <div class="group-team">Alemania</div>
+            <div class="group-team">Irán</div>
+            <div class="group-team">Senegal</div>
+            <div class="group-team">Venezuela</div>
+          </div>
+        </div>
+        <div class="group-card">
+          <div class="group-header">Grupo G</div>
+          <div class="group-teams">
+            <div class="group-team">Portugal</div>
+            <div class="group-team">Colombia</div>
+            <div class="group-team">Rumanía</div>
+            <div class="group-team">Bélgica</div>
+          </div>
+        </div>
+        <div class="group-card">
+          <div class="group-header">Grupo H</div>
+          <div class="group-teams">
+            <div class="group-team">Inglaterra</div>
+            <div class="group-team">México</div>
+            <div class="group-team">Uzbekistán</div>
+            <div class="group-team">Panamá</div>
+          </div>
+        </div>
+        <div class="group-card">
+          <div class="group-header">Grupo I</div>
+          <div class="group-teams">
+            <div class="group-team">Uruguay</div>
+            <div class="group-team">Suiza</div>
+            <div class="group-team">Sudáfrica</div>
+            <div class="group-team">Ecuador</div>
+          </div>
+        </div>
+        <div class="group-card">
+          <div class="group-header">Grupo J</div>
+          <div class="group-teams">
+            <div class="group-team">Italia</div>
+            <div class="group-team">Croacia</div>
+            <div class="group-team">Perú</div>
+            <div class="group-team">Guatemala</div>
+          </div>
+        </div>
+        <div class="group-card">
+          <div class="group-header">Grupo K</div>
+          <div class="group-teams">
+            <div class="group-team">Corea del Sur</div>
+            <div class="group-team">Ghana</div>
+            <div class="group-team">Eslovaquia</div>
+            <div class="group-team">Bolivia</div>
+          </div>
+        </div>
+        <div class="group-card">
+          <div class="group-header">Grupo L</div>
+          <div class="group-teams">
+            <div class="group-team">Nigeria</div>
+            <div class="group-team">Turquía</div>
+            <div class="group-team">Costa de Marfil</div>
+            <div class="group-team">China</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout callout-blue mt-2">
+        <span class="callout-icon">ℹ</span>
+        <div class="callout-body">Los nombres de los equipos se definen en <code class="inline">src/lib/data.ts</code> y se usan tanto en el wizard como en la generación del PDF.</div>
       </div>
     </section>
 
-    <!-- LÓGICA DE TERCEROS -->
-    <section class="doc-section" id="terceros">
+    <!-- 09 BUGS RESUELTOS -->
+    <section class="section" id="s9">
       <div class="section-header">
-        <span class="section-number">05</span>
-        <h2 class="section-title">Lógica de terceros</h2>
-      </div>
-
-      <div class="card">
-        <div class="card-body">
-          El Mundial 2026 tiene 12 grupos, de los cuales solo 8 terceros clasificados pasan a los 1/16. La asignación de qué tercer clasificado juega contra qué primero depende de <strong>qué combinación de 8 grupos</strong> aportan un tercer clasificado. Hay C(12,8) = 495 combinaciones posibles.<br><br>
-          Se implementó la tabla completa en <code>thirdPlaceTable.ts</code>, generada a partir del fichero Excel oficial. La función <code>assignThirdPlaceTeams</code> recibe 8 letras de grupo, las ordena alfabéticamente, genera la clave (p.ej. <code>"ABCDEFGH"</code>) y consulta la tabla para obtener el mapa de slots.
-        </div>
-      </div>
-
-      <p class="subheading">Slots y su significado en el bracket</p>
-      <table class="slot-table">
-        <thead>
-          <tr>
-            <th>Slot</th>
-            <th>Partido 1/16</th>
-            <th>Mitad</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td><code>vs1E</code></td><td>R16-1: 1º Grupo E vs 3º</td><td>Superior</td></tr>
-          <tr><td><code>vs1I</code></td><td>R16-2: 1º Grupo I vs 3º</td><td>Superior</td></tr>
-          <tr><td><code>vs1D</code></td><td>R16-7: 1º Grupo D vs 3º</td><td>Superior</td></tr>
-          <tr><td><code>vs1G</code></td><td>R16-8: 1º Grupo G vs 3º</td><td>Superior</td></tr>
-          <tr><td><code>vs1A</code></td><td>R16-11: 1º Grupo A vs 3º</td><td>Inferior</td></tr>
-          <tr><td><code>vs1L</code></td><td>R16-12: 1º Grupo L vs 3º</td><td>Inferior</td></tr>
-          <tr><td><code>vs1B</code></td><td>R16-15: 1º Grupo B vs 3º</td><td>Inferior</td></tr>
-          <tr><td><code>vs1K</code></td><td>R16-16: 1º Grupo K vs 3º</td><td>Inferior</td></tr>
-        </tbody>
-      </table>
-
-      <p class="subheading">Ejemplo — combinación ABCDEFGH</p>
-<div class="code-block"><span class="cm">// thirdPlaceTable.ts</span>
-<span class="str">"ABCDEFGH"</span>: {
-  <span class="str">"vs1A"</span>: <span class="str">"H"</span>,  <span class="cm">// 3º Grupo H (Arabia Saudí) vs 1º A</span>
-  <span class="str">"vs1B"</span>: <span class="str">"G"</span>,  <span class="cm">// 3º Grupo G (Irán) vs 1º B</span>
-  <span class="str">"vs1D"</span>: <span class="str">"B"</span>,  <span class="cm">// 3º Grupo B (Catar) vs 1º D</span>
-  <span class="str">"vs1E"</span>: <span class="str">"C"</span>,  <span class="cm">// 3º Grupo C (Haití) vs 1º E</span>
-  <span class="str">"vs1G"</span>: <span class="str">"A"</span>,  <span class="cm">// 3º Grupo A (Corea del Sur) vs 1º G</span>
-  <span class="str">"vs1I"</span>: <span class="str">"F"</span>,  <span class="cm">// 3º Grupo F (Suecia) vs 1º I</span>
-  <span class="str">"vs1K"</span>: <span class="str">"D"</span>,  <span class="cm">// 3º Grupo D (Australia) vs 1º K</span>
-  <span class="str">"vs1L"</span>: <span class="str">"E"</span>   <span class="cm">// 3º Grupo E (C. Marfil) vs 1º L</span>
-}</div>
-    </section>
-
-    <!-- DESARROLLO -->
-    <section class="doc-section" id="desarrollo">
-      <div class="section-header">
-        <span class="section-number">06</span>
-        <h2 class="section-title">Fases de desarrollo</h2>
-      </div>
-
-      <p style="font-size: 14px; color: var(--text-2); margin-bottom: 1.5rem;">Desarrollo ejecutado en 6 fases secuenciales usando Claude Code, con <code>PLAN_PORRA_MUNDIAL_2026.md</code> como documento de especificación y contexto persistente entre prompts.</p>
-
-      <div class="timeline">
-        <div class="tl-item">
-          <div class="tl-marker"><div class="tl-dot done"></div></div>
-          <div class="tl-content">
-            <div class="tl-phase">Fase 0 · Supabase <span class="badge badge-green">completado</span></div>
-            <div class="tl-desc">Creación del proyecto en región EU West (París). Diseño de tabla <code>apuestas</code>. Política RLS de INSERT anónimo. Obtención de URL y anon key para las variables de entorno.</div>
-          </div>
-        </div>
-        <div class="tl-item">
-          <div class="tl-marker"><div class="tl-dot done"></div></div>
-          <div class="tl-content">
-            <div class="tl-phase">Fase 1 · Scaffold + datos <span class="badge badge-green">completado</span></div>
-            <div class="tl-desc">Inicialización de Next.js 14 con App Router, TypeScript y Tailwind CSS. Definición de tipos base. Datos de los 12 grupos, 48 equipos y emparejamientos de 1/16.</div>
-          </div>
-        </div>
-        <div class="tl-item">
-          <div class="tl-marker"><div class="tl-dot done"></div></div>
-          <div class="tl-content">
-            <div class="tl-phase">Fase 2 · Algoritmo de terceros <span class="badge badge-green">completado</span></div>
-            <div class="tl-desc">Generación de la tabla lookup con las 495 combinaciones FIFA desde el Excel oficial. Implementación de <code>thirdPlaceTable.ts</code> y función <code>assignThirdPlaceTeams</code>.</div>
-          </div>
-        </div>
-        <div class="tl-item">
-          <div class="tl-marker"><div class="tl-dot done"></div></div>
-          <div class="tl-content">
-            <div class="tl-phase">Fase 3 · Wizard + UI <span class="badge badge-green">completado</span></div>
-            <div class="tl-desc">Wizard multi-paso con stepper visual. Validación por fase (no avanzar si la fase no está completa). Diseño responsive mobile-first. Selector de terceros integrado con la lógica FIFA.</div>
-          </div>
-        </div>
-        <div class="tl-item">
-          <div class="tl-marker"><div class="tl-dot done"></div></div>
-          <div class="tl-content">
-            <div class="tl-phase">Fase 4 · Generación de PDF <span class="badge badge-green">completado</span></div>
-            <div class="tl-desc">Bracket visual con <code>@react-pdf/renderer</code>, generado completamente en el navegador. Sin servidor ni funciones serverless — compatible con Vercel free tier.</div>
-          </div>
-        </div>
-        <div class="tl-item">
-          <div class="tl-marker"><div class="tl-dot done"></div></div>
-          <div class="tl-content">
-            <div class="tl-phase">Fase 5 · Integración Supabase <span class="badge badge-green">completado</span></div>
-            <div class="tl-desc">Envío de predicciones a Supabase al generar el PDF. Variables de entorno en <code>.env.local</code> (fuera del repositorio).</div>
-          </div>
-        </div>
-        <div class="tl-item">
-          <div class="tl-marker"><div class="tl-dot done"></div></div>
-          <div class="tl-content">
-            <div class="tl-phase">Fase 6 · Despliegue v1 <span class="badge badge-green">completado</span></div>
-            <div class="tl-desc">Repositorio creado con <code>gh</code> CLI. Importación en Vercel. Variables de entorno configuradas en el panel de Vercel. App v1 en producción.</div>
-          </div>
-        </div>
-        <div class="tl-item">
-          <div class="tl-marker"><div class="tl-dot done"></div></div>
-          <div class="tl-content">
-            <div class="tl-phase">Fase 7 · v2: Bracket interactivo <span class="badge badge-green">completado</span></div>
-            <div class="tl-desc">Nueva versión con bracket visual completo (9 columnas: dieciseisavos → final en el centro). Interacción por clic con cascada de corrección. Inicialmente en <code>/v2</code>, después promovida a ruta principal <code>/</code>. Reutiliza componentes de grupos y terceros de v1.</div>
-          </div>
-        </div>
-        <div class="tl-item">
-          <div class="tl-marker"><div class="tl-dot done"></div></div>
-          <div class="tl-content">
-            <div class="tl-phase">Fase 8 · Mejoras v2 <span class="badge badge-green">completado</span></div>
-            <div class="tl-desc">Botón de relleno aleatorio 🎲 en grupos, terceros y fase final. Logo oficial del Mundial 2026 en el PDF. Hora de España peninsular (<code>Europe/Madrid</code>) en la cabecera del PDF. Título y crédito en la página: "Generador de Porras del Mundial 2026 · Creado por Rodrigo Silva". Botón "Crear nueva porra" tras generar PDF. Lógica anti-duplicados en Supabase (solo un INSERT por apuesta, reintentar solo descarga PDF).</div>
-          </div>
-        </div>
-        <div class="tl-item">
-          <div class="tl-marker"><div class="tl-dot done"></div></div>
-          <div class="tl-content">
-            <div class="tl-phase">Fase 9 · Panel /admin <span class="badge badge-green">completado</span></div>
-            <div class="tl-desc">Ruta <code>/admin</code> (no enlazada públicamente) con listado de todas las apuestas. Buscador por nombre. Columnas ordenables (nombre, sección, campeón, fecha) ascendente/descendente. Botón "Descargar PDF" por fila para regenerar PDFs desde los datos de Supabase. Usa <code>SUPABASE_SERVICE_ROLE_KEY</code> en la API route del servidor.</div>
-          </div>
-        </div>
-        <div class="tl-item">
-          <div class="tl-marker"><div class="tl-dot done"></div></div>
-          <div class="tl-content">
-            <div class="tl-phase">Fase 10 · Reorganización de rutas <span class="badge badge-green">completado</span></div>
-            <div class="tl-desc">v2 promovida a ruta principal <code>/</code>. v1 conservada en <code>/v1</code>. Redirect automático de <code>/v2</code> a <code>/</code> en <code>next.config.js</code>. Documentación estática en <code>/docs</code>.</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- BUGS -->
-    <section class="doc-section" id="bugs">
-      <div class="section-header">
-        <span class="section-number">07</span>
+        <span class="section-num">09</span>
         <h2 class="section-title">Bugs resueltos</h2>
       </div>
 
-      <div class="alert error">
-        <div class="alert-title">🐛 Bug: slots <code>vs1I</code> y <code>vs1B</code> intercambiados en la UI</div>
-        <div class="alert-body">
-          La tabla <code>thirdPlaceTable.ts</code> era correcta, pero la capa de emparejamientos del bracket tenía los dos slots intercambiados en <code>data.ts</code>.<br><br>
-          Ejemplo con combinación ABCDEFGH:<br>
-          · <code>vs1I</code> devolvía 3º Grupo G (Irán) ← incorrecto<br>
-          · <code>vs1B</code> devolvía 3º Grupo F (Suecia) ← incorrecto
-        </div>
-      </div>
-
-      <div class="alert success">
-        <div class="alert-title">✓ Solución aplicada</div>
-        <div class="alert-body">
-          Se corrigió el cableado en <code>data.ts</code> verificando que cada partido de 1/16 que involucra un tercero apunte al slot correcto:<br><br>
-          · R16-2 (1º Grupo I) → slot <code>vs1I</code> → 3º Grupo F (Suecia) ✓<br>
-          · R16-15 (1º Grupo B) → slot <code>vs1B</code> → 3º Grupo G (Irán) ✓
-        </div>
-      </div>
-
-      <div class="card" style="margin-top: 1.5rem;">
-        <div class="card-title"><span class="icon">📊</span> Bug Google Sheets: clave de Supabase incorrecta</div>
-        <div class="card-body">
-          Al configurar el script de Apps Script para exportar las apuestas a Google Sheets, se usó la <code>publishable key</code> (anon key) en lugar de la <code>service_role key</code>.<br><br>
-          La política RLS bloquea SELECT para el rol <code>anon</code>, por lo que el script devolvía 0 resultados.<br><br>
-          <strong>Solución:</strong> usar la service_role key (JWT largo, empieza por <code>eyJhbGciOi...</code>) únicamente en el entorno del Apps Script, que es privado. La service_role key bypasea RLS y tiene acceso completo a la tabla.
-        </div>
-      </div>
-
-      <div class="alert error" style="margin-top: 1.5rem;">
-        <div class="alert-title">🐛 Bug: HTTP 500 en /admin (Vercel) — "supabaseKey is required"</div>
-        <div class="alert-body">
-          El panel <code>/admin</code> funcionaba en local pero devolvía HTTP 500 en producción. Los logs de Vercel mostraban: <code>Error: supabaseKey is required</code>.<br><br>
-          <strong>Causa:</strong> la variable <code>SUPABASE_SERVICE_ROLE_KEY</code> se había pegado en Vercel con saltos de línea (el JWT quedaba partido en varias líneas), por lo que Vercel no la leía correctamente.<br><br>
-          <strong>Solución:</strong> borrar la variable en Vercel, volver a crearla asegurándose de pegarla en una sola línea continua, y hacer redeploy.
-        </div>
-      </div>
-
-      <div class="alert success" style="margin-top: 1rem;">
-        <div class="alert-title">✓ Solución aplicada</div>
-        <div class="alert-body">
-          Variable recreada sin saltos de línea. Redeploy ejecutado. <code>/admin</code> funciona correctamente en producción.
-        </div>
-      </div>
-
-      <div class="card" style="margin-top: 1.5rem;">
-        <div class="card-title"><span class="icon">🔌</span> Bug: HTTP 500 al guardar apuesta desde v2</div>
-        <div class="card-body">
-          El PDF se generaba correctamente pero la apuesta no se guardaba en Supabase (HTTP 500). La estructura del JSON que enviaba la v2 no coincidía exactamente con lo que esperaba la API route.<br><br>
-          <strong>Solución:</strong> ajustar la estructura de datos que envía el componente de v2 para que coincida con el esquema de la tabla <code>apuestas</code> en Supabase.
-        </div>
-      </div>
-    </section>
-
-    <!-- OPERACIONES -->
-    <section class="doc-section" id="ops">
-      <div class="section-header">
-        <span class="section-number">08</span>
-        <h2 class="section-title">Operaciones</h2>
-      </div>
-
-      <p class="subheading">Google Sheets: exportar y puntuar durante el torneo</p>
       <div class="card">
+        <div class="card-title">🐛 Bug 1 — Slots <code class="inline">vs1I</code> / <code class="inline">vs1B</code> invertidos en <code class="inline">data.ts</code></div>
         <div class="card-body">
-          Script de Google Apps Script que sincroniza los datos de Supabase con una hoja de cálculo. Tiene dos hojas:<br><br>
-          <strong>Predicciones</strong> — se rellena automáticamente desde Supabase con: fecha · nombre · sección · equipos por fase · puntos por fase · total puntos.<br><br>
-          <strong>Resultados</strong> — se rellena manualmente con los equipos reales que van pasando cada fase. Las celdas están en amarillo.<br><br>
-          El script compara ambas hojas y calcula los puntos. Menú personalizado con tres acciones: <em>Actualizar predicciones</em>, <em>Recalcular puntos</em> y <em>Actualizar todo</em>. Opcionalmente configurable para auto-actualizar cada hora.
-        </div>
-      </div>
-
-      <div class="alert warn">
-        <div class="alert-title">⚠️ Atención con los nombres de equipo</div>
-        <div class="alert-body">Los nombres en la hoja "Resultados" deben coincidir <strong>exactamente</strong> con los de la app (tildes incluidas). Un carácter distinto = no cuenta como acierto. Nombres críticos: <code>España</code>, <code>EE UU</code>, <code>C. Marfil</code>, <code>Bosnia y H.</code>, <code>N. Zelanda</code>, <code>Arabia Saudí</code>.</div>
-      </div>
-
-      <p class="subheading">Supabase: mantenimiento</p>
-      <div class="two-col">
-        <div class="card">
-          <div class="card-title"><span class="icon">🔐</span> GRANT ejecutado (oct 2026)</div>
-          <div class="card-body">
-            <code>GRANT INSERT ON public.apuestas TO anon;</code><br><br>
-            Ejecutado en el SQL Editor de Supabase. No requiere más acción. <span class="badge badge-green">listo</span>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Campo</th><th>Detalle</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Síntoma</strong></td><td>Los terceros clasificados de las combinaciones que usaban slots <code class="inline">vs1B</code> e <code class="inline">vs1I</code> aparecían en el bracket equivocado</td></tr>
+                <tr><td><strong>Causa</strong></td><td>Los slots estaban invertidos en las definiciones del bracket en <code class="inline">data.ts</code> (capa UI), no en <code class="inline">thirdPlaceTable.ts</code> (que es correcta)</td></tr>
+                <tr><td><strong>Fix</strong></td><td>Intercambio de los valores de <code class="inline">vs1I</code> y <code class="inline">vs1B</code> en <code class="inline">data.ts</code></td></tr>
+                <tr><td><strong>Verificación</strong></td><td>Combinación ABCDEFGH: el tercero de A va al slot correcto según la tabla FIFA</td></tr>
+              </tbody>
+            </table>
           </div>
         </div>
-        <div class="card">
-          <div class="card-title"><span class="icon">🛡️</span> Security Advisor</div>
-          <div class="card-body">
-            0 errores · 3 warnings ignorables.<br><br>
-            Revisar periódicamente en: <em>Supabase Dashboard → Advisors → Security</em>
+      </div>
+
+      <div class="card mt-2">
+        <div class="card-title">🐛 Bug 2 — Clave anon usada en Apps Script en lugar de service_role</div>
+        <div class="card-body">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Campo</th><th>Detalle</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Síntoma</strong></td><td>El Apps Script no encontraba ninguna predicción en Supabase (0 resultados)</td></tr>
+                <tr><td><strong>Causa</strong></td><td>Se estaba usando la <code class="inline">sb_publishable_...</code> (anon key) en lugar del JWT <code class="inline">service_role</code>. La anon key solo tiene permiso de INSERT, no de SELECT (según la política RLS)</td></tr>
+                <tr><td><strong>Fix</strong></td><td>Reemplazar la clave en el editor de Apps Script por la <code class="inline">service_role</code> JWT (Supabase → Settings → API)</td></tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- PANEL ADMIN -->
-    <section class="doc-section" id="admin">
+    <!-- 10 OPS -->
+    <section class="section" id="s10">
       <div class="section-header">
-        <span class="section-number">09</span>
-        <h2 class="section-title">Panel Admin</h2>
+        <span class="section-num">10</span>
+        <h2 class="section-title">Operaciones y mantenimiento</h2>
       </div>
 
       <div class="card">
-        <div class="card-title"><span class="icon">🔧</span> Ruta /admin — gestión de apuestas</div>
+        <div class="card-title">🚀 Flujo de despliegue</div>
         <div class="card-body">
-          Panel privado (no enlazado públicamente) para administrar las apuestas guardadas. Accesible solo conociendo la URL directa. No requiere autenticación adicional.<br><br>
-          <strong>Funcionalidades:</strong><br>
-          · Listado completo de todas las apuestas en tabla<br>
-          · Columnas: #, Nombre, Sección, Campeón, Fecha<br>
-          · Todas las columnas son ordenables (clic en cabecera: ascendente ▲ / descendente ▼)<br>
-          · Buscador por nombre en la parte superior<br>
-          · Botón "Descargar PDF" por cada fila — regenera el PDF con los datos de Supabase<br><br>
-          <strong>Implementación técnica:</strong><br>
-          · API route <code>GET /api/apuestas</code> usando <code>SUPABASE_SERVICE_ROLE_KEY</code> (server-side, bypasea RLS)<br>
-          · La service_role key nunca se expone al cliente (sin prefijo <code>NEXT_PUBLIC_</code>)<br>
-          · En Vercel, configurada como variable "Sensitive" (solo Production y Preview)
+          <ol style="padding-left:1.2rem; color:var(--text-2); font-size:14px; line-height:1.8;">
+            <li>Push a <code class="inline">main</code> en GitHub</li>
+            <li>Vercel detecta el push y lanza build automático</li>
+            <li>Variables de entorno (<code class="inline">NEXT_PUBLIC_SUPABASE_URL</code>, <code class="inline">NEXT_PUBLIC_SUPABASE_ANON_KEY</code>) ya configuradas en el panel de Vercel</li>
+            <li>Deploy en producción sin intervención manual</li>
+          </ol>
         </div>
       </div>
+
+      <div class="card mt-2">
+        <div class="card-title">📅 Cambio de política Supabase — Oct 2026</div>
+        <div class="card-body">
+          <p>A partir de <strong>octubre 2026</strong>, Supabase requiere grants explícitos para que el rol <code class="inline">anon</code> acceda a tablas del schema <code class="inline">public</code> vía Data API, además de las políticas RLS.</p>
+          <div class="callout callout-green mt-1">
+            <span class="callout-icon">✓</span>
+            <div class="callout-body">El <code class="inline">GRANT INSERT ON public.apuestas TO anon</code> ya fue ejecutado en mayo 2026. No se requiere acción adicional.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mt-2">
+        <div class="card-title">🔄 Actualizar clasificación durante el torneo</div>
+        <div class="card-body">
+          <ol style="padding-left:1.2rem; color:var(--text-2); font-size:14px; line-height:1.8;">
+            <li>Abrir el Google Spreadsheet</li>
+            <li>Rellenar los resultados reales en la hoja <strong>Resultados</strong></li>
+            <li>Menú Porra → <strong>Actualizar todo</strong> (o esperar el trigger horario si está activo)</li>
+            <li>El dashboard en <code class="inline">/dashboard</code> refleja los cambios al pulsar el botón de actualizar</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="card mt-2">
+        <div class="card-title">⚡ Notas técnicas relevantes</div>
+        <div class="card-body">
+          <ul class="list">
+            <li>La <code class="inline">anon key</code> (prefijo <code class="inline">sb_publishable_</code>) no funciona para lecturas server-side en Supabase; solo para INSERTs desde el cliente</li>
+            <li>El CSV de Google Sheets siempre debe proxearse por <code class="inline">app/api/scores/route.ts</code> con <code class="inline">cache: 'no-store'</code></li>
+            <li>El PDF se genera completamente en el cliente — sin carga en el servidor</li>
+            <li>No hay autenticación de usuarios — la app es completamente pública y anónima</li>
+            <li>El spec doc (<code class="inline">PLAN_PORRA_MUNDIAL_2026.md</code>) se usó como contexto persistente en todos los prompts de Claude Code durante el desarrollo</li>
+          </ul>
+        </div>
+      </div>
+
     </section>
 
   </main>
 </div>
 
+<!-- FOOTER -->
 <footer class="site-footer">
-  <p>Porra Mundial 2026 · El País · Documentación actualizada en mayo 2026 · Next.js + Supabase + Vercel</p>
+  <span>Porra Mundial 2026 · El País · Documentación actualizada mayo 2026</span>
+  &nbsp;·&nbsp;
+  <a href="mailto:rsilva@elpais.es">rsilva@elpais.es</a>
 </footer>
 
 <script>
-  const sections = document.querySelectorAll('.doc-section');
-  const navLinks = document.querySelectorAll('.nav-list a');
+  function setActive(el) {
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  // Scroll spy
+  const sections = document.querySelectorAll('.section');
+  const navItems = document.querySelectorAll('.nav-item');
 
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        navLinks.forEach(l => l.classList.remove('active'));
-        const active = document.querySelector(`.nav-list a[href="#${entry.target.id}"]`);
-        if (active) active.classList.add('active');
+        const id = entry.target.id;
+        navItems.forEach(item => {
+          item.classList.toggle('active', item.getAttribute('href') === '#' + id);
+        });
       }
     });
   }, { rootMargin: '-20% 0px -70% 0px' });
 
   sections.forEach(s => observer.observe(s));
 </script>
-
 </body>
 </html>
