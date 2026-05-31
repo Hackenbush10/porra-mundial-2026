@@ -59,20 +59,20 @@ function parseData(csv: string): ParticipantRow[] {
   const entries: ParticipantRow[] = [];
   for (let i = 1; i < lines.length; i++) {
     const r = lines[i];
-    if (!r || r.length < 17) continue;
+    if (!r || r.length < 18) continue;
     const name = (r[1] || '').trim();
     if (!name) continue;
 
     entries.push({
       name,
       section: (r[2] || '').trim(),
-      pts16: parseInt(r[5], 10) || 0,   // col F
-      pts8: parseInt(r[7], 10) || 0,    // col H
-      pts4: parseInt(r[9], 10) || 0,    // col J
-      ptsSemis: parseInt(r[11], 10) || 0, // col L
-      ptsFinal: parseInt(r[13], 10) || 0, // col N
-      ptsChamp: parseInt(r[15], 10) || 0, // col P
-      total: parseInt(r[16], 10) || 0,   // col Q
+      pts16: parseInt(r[6], 10) || 0,    // col G (Puntos 1/16)
+      pts8: parseInt(r[8], 10) || 0,     // col I (Puntos 1/8)
+      pts4: parseInt(r[10], 10) || 0,    // col K (Puntos 1/4)
+      ptsSemis: parseInt(r[12], 10) || 0, // col M (Puntos semis)
+      ptsFinal: parseInt(r[14], 10) || 0, // col O (Puntos final)
+      ptsChamp: parseInt(r[16], 10) || 0, // col Q (Puntos campeón)
+      total: parseInt(r[17], 10) || 0,    // col R (Total puntos)
     });
   }
 
