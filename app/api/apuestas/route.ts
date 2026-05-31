@@ -29,7 +29,7 @@ export async function GET() {
   try {
     const { data, error } = await adminClient()
       .from('apuestas')
-      .select('id, nombre, seccion, email, campeon, created_at, grupos, mejores_terceros, bracket')
+      .select('id, nombre, seccion, email, campeon, created_at, grupos, mejores_terceros, bracket, pagado')
       .order('created_at', { ascending: false });
 
     if (error) {

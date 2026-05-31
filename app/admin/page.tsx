@@ -29,6 +29,7 @@ interface ApuestaRow {
   email: string | null;
   campeon: string;
   created_at: string;
+  pagado: boolean | null;
   grupos: GruposState;
   mejores_terceros: GroupLetter[];
   bracket: BracketData;
@@ -98,7 +99,7 @@ async function downloadRowPdf(row: ApuestaRow): Promise<void> {
 
 // ─── Sort types ──────────────────────────────────────────────────────────────
 
-type SortKey = 'index' | 'nombre' | 'seccion' | 'email' | 'campeon' | 'created_at';
+type SortKey = 'index' | 'nombre' | 'seccion' | 'email' | 'campeon' | 'created_at' | 'pagado';
 type SortDir = 'asc' | 'desc';
 
 // ─── Main component ───────────────────────────────────────────────────────────
@@ -151,6 +152,9 @@ export default function AdminPage() {
       cmp = a.created_at.localeCompare(b.created_at);
     } else if (sortKey === 'email') {
       cmp = (a.email ?? '').localeCompare(b.email ?? '', 'es', { sensitivity: 'base' });
+    } else if (sortKey === 'pagado') {
+      // true (pagado) primero en asc
+      cmp = (a.pagado ? 1 : 0) - (b.pagado ? 1 : 0);
     } else {
       cmp = a[sortKey].localeCompare(b[sortKey], 'es', { sensitivity: 'base' });
     }
@@ -196,6 +200,22 @@ export default function AdminPage() {
           </div>
           <span className="text-3xl">&#9917;</span>
         </div>
+
+        {/* Pagadas counter */}
+        {!loading && !fetchError && apuestas.length > 0 && (() => {
+          const pagadas = apuestas.filter((a) => a.pagado === true).length;
+          return (
+            <div className="flex items-center gap-2 px-4 py-2.5 bg-white rounded-xl border border-gray-200 shadow-sm w-fit">
+              <span className="text-lg">💰</span>
+              <span className="text-sm font-medium text-gray-700">
+                Pagadas:{' '}
+                <span className="font-bold text-emerald-700">{pagadas}</span>
+                <span className="text-gray-400"> de </span>
+                <span className="font-bold text-gray-900">{apuestas.length}</span>
+              </span>
+            </div>
+          );
+        })()}
 
         {/* Search */}
         <div className="relative">
@@ -243,6 +263,7 @@ export default function AdminPage() {
                           { key: 'email', label: 'Email' },
                           { key: 'campeon', label: 'Campeón' },
                           { key: 'created_at', label: 'Fecha' },
+                          { key: 'pagado', label: 'Pagado' },
                         ] as { key: SortKey; label: string }[]
                       ).map(({ key, label }) => (
                         <th
@@ -278,6 +299,9 @@ export default function AdminPage() {
                         </td>
                         <td className="px-4 py-3 text-gray-500 whitespace-nowrap text-xs">
                           {formatDate(row.created_at)}
+                        </td>
+                        <td className="px-4 py-3 text-center text-base">
+                          {row.pagado === true ? '✅' : '❌'}
                         </td>
                         <td className="px-4 py-3 text-right">
                           <div className="flex flex-col items-end gap-1">
