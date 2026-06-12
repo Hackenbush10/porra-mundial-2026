@@ -59,22 +59,26 @@ function parseData(csv: string): ParticipantRow[] {
   if (lines.length < 2) return [];
 
   const entries: ParticipantRow[] = [];
+  // CSV columns: 0=Fecha 1=Nombre 2=Sección 3=Equipos1/16 4=Puntos1/16
+  //   5=Equipos1/8 6=Puntos1/8 7=Equipos1/4 8=Puntos1/4 9=EquiposSemis
+  //   10=PuntosSemis 11=EquiposFinal 12=PuntosFinal 13=Campeón
+  //   14=PuntosCampeón 15=TotalPuntos
   for (let i = 1; i < lines.length; i++) {
     const r = lines[i];
-    if (!r || r.length < 18) continue;
+    if (!r || r.length < 16) continue;
     const name = (r[1] || '').trim();
     if (!name) continue;
 
     entries.push({
       name,
       section: (r[2] || '').trim(),
-      pts16: parseInt(r[6], 10) || 0,    // col G (Puntos 1/16)
-      pts8: parseInt(r[8], 10) || 0,     // col I (Puntos 1/8)
-      pts4: parseInt(r[10], 10) || 0,    // col K (Puntos 1/4)
-      ptsSemis: parseInt(r[12], 10) || 0, // col M (Puntos semis)
-      ptsFinal: parseInt(r[14], 10) || 0, // col O (Puntos final)
-      ptsChamp: parseInt(r[16], 10) || 0, // col Q (Puntos campeón)
-      total: parseInt(r[17], 10) || 0,    // col R (Total puntos)
+      pts16: parseInt(r[4], 10) || 0,
+      pts8: parseInt(r[6], 10) || 0,
+      pts4: parseInt(r[8], 10) || 0,
+      ptsSemis: parseInt(r[10], 10) || 0,
+      ptsFinal: parseInt(r[12], 10) || 0,
+      ptsChamp: parseInt(r[14], 10) || 0,
+      total: parseInt(r[15], 10) || 0,
     });
   }
 
