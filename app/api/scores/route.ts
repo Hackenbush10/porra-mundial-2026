@@ -1,6 +1,8 @@
 // app/api/scores/route.ts
 import { NextResponse } from 'next/server';
 
+export const dynamic = 'force-dynamic';
+
 const SHEET_ID = '1A5JQaPMUPxiNEStbc9g3A4NhcvnqSaDcSPI6QGTEr20';
 const GID = '691986591';
 const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${GID}`;
