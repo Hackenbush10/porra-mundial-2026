@@ -33,6 +33,7 @@ export default function DashboardPage() {
   const [error, setError] = useState<string | null>(null);
   const [lastUpdate, setLastUpdate] = useState<Date | null>(null);
   const [refreshing, setRefreshing] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const fetchData = useCallback(async () => {
     try {
@@ -67,6 +68,13 @@ export default function DashboardPage() {
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+
+  const normalize = (s: string) =>
+    s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+
+  const filtered = searchTerm.trim()
+    ? data.filter((d) => normalize(d.name).includes(normalize(searchTerm.trim())))
+    : data;
 
   const maxPoints = Math.max(1, ...data.map((d) => d.total));
 
@@ -133,6 +141,34 @@ export default function DashboardPage() {
 
         {error && <div className="dashboard-error">Error: {error}</div>}
 
+        {/* Search */}
+        <div className="dashboard-search-wrap">
+          <div className="dashboard-search-box">
+            <span className="dashboard-search-icon">🔍</span>
+            <input
+              type="text"
+              className="dashboard-search-input"
+              placeholder="Buscar participante..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            {searchTerm && (
+              <button
+                className="dashboard-search-clear"
+                onClick={() => setSearchTerm('')}
+                aria-label="Limpiar búsqueda"
+              >
+                ×
+              </button>
+            )}
+          </div>
+          {searchTerm.trim() && (
+            <p className="dashboard-search-count">
+              Mostrando {filtered.length} de {data.length} participantes
+            </p>
+          )}
+        </div>
+
         {/* Legend */}
         <div className="dashboard-legend">
           {PHASES.map((p) => (
@@ -158,7 +194,7 @@ export default function DashboardPage() {
               </tr>
             </thead>
             <tbody>
-              {data.map((entry, i) => {
+              {filtered.map((entry, i) => {
                 const barPct =
                   maxPoints > 0 ? (entry.total / maxPoints) * 100 : 0;
                 const isTop = entry.position === 1 && entry.total > 0;
@@ -481,6 +517,65 @@ const globalCSS = `
   text-align: right;
 }
 
+/* Search */
+.dashboard-search-wrap {
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.dashboard-search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 360px;
+}
+
+.dashboard-search-icon {
+  position: absolute;
+  left: 10px;
+  font-size: 13px;
+  pointer-events: none;
+  user-select: none;
+}
+
+.dashboard-search-input {
+  width: 100%;
+  padding: 8px 36px 8px 32px;
+  background-color: #1a1d27;
+  border: 1px solid #2a2d3a;
+  border-radius: 8px;
+  color: #e4e4e7;
+  font-size: 13px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.dashboard-search-input::placeholder { color: #6b7280; }
+.dashboard-search-input:focus { border-color: #3b82f6; }
+
+.dashboard-search-clear {
+  position: absolute;
+  right: 8px;
+  background: none;
+  border: none;
+  color: #6b7280;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 2px 4px;
+  font-family: inherit;
+}
+.dashboard-search-clear:hover { color: #e4e4e7; }
+
+.dashboard-search-count {
+  font-size: 12px;
+  color: #8b8d98;
+  margin: 0;
+}
+
 /* Mobile */
 @media (max-width: 640px) {
   .dashboard-page { padding: 20px 14px; }
@@ -488,5 +583,6 @@ const globalCSS = `
   .col-name { width: 120px; }
   .col-section { width: 80px; }
   .td-name, .td-section { font-size: 12px; }
+  .dashboard-search-box { max-width: 100%; }
 }
 `;
